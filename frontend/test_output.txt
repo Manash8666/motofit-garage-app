@@ -1,0 +1,677 @@
+
+> frontend@0.0.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.17 [39m[90mC:/Users/Manas/OneDrive/Desktop/MotoFit App/frontend[39m
+
+ [31mΓ¥»[39m src/utils/__tests__/api.test.js [2m([22m[2m0 test[22m[2m)[22m
+ [32mΓ£ô[39m src/stores/__tests__/hybridStore.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+stderr | src/components/__tests__/InvoicePDF.test.jsx > InvoicePDF Component > renders invoice list when no invoice is selected
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [31mΓ¥»[39m src/components/__tests__/InvoicePDF.test.jsx [2m([22m[2m7 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 193[2mms[22m[39m
+[31m     [31m├ù[31m renders invoice list when no invoice is selected[39m[32m 119[2mms[22m[39m
+[31m     [31m├ù[31m displays customer name correctly in printable invoice[39m[32m 27[2mms[22m[39m
+     [32mΓ£ô[39m calculates invoice totals correctly[32m 0[2mms[22m[39m
+     [32mΓ£ô[39m renders QR code for Google Reviews[32m 19[2mms[22m[39m
+     [32mΓ£ô[39m handles long customer names without overflow[32m 0[2mms[22m[39m
+     [32mΓ£ô[39m formats currency correctly in Indian Rupees[32m 2[2mms[22m[39m
+     [32mΓ£ô[39m renders all invoice items with prices[32m 24[2mms[22m[39m
+ [31mΓ¥»[39m src/components/__tests__/JobCardPrint.test.jsx [2m([22m[2m3 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 106[2mms[22m[39m
+     [32mΓ£ô[39m does NOT show warranty badge when warranty is undefined[32m 70[2mms[22m[39m
+[31m     [31m├ù[31m shows WARRANTY: YES when warranty is true[39m[32m 19[2mms[22m[39m
+[31m     [31m├ù[31m shows WARRANTY: NO when warranty is false[39m[32m 16[2mms[22m[39m
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Suites 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  src/utils/__tests__/api.test.js [ src/utils/__tests__/api.test.js ]
+TypeError: Cannot read properties of undefined (reading 'interceptors')
+ Γ¥» src/utils/api.ts:16:11
+     14| 
+     15| // Request interceptor - Add auth token
+     16| apiClient.interceptors.request.use(
+       |           ^
+     17|     (config) => {
+     18|         const token = localStorage.getItem('auth_token');
+ Γ¥» src/utils/__tests__/api.test.js:3:1
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/5]ΓÄ»
+
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 4 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  src/components/__tests__/InvoicePDF.test.jsx > InvoicePDF Component > renders invoice list when no invoice is selected
+TestingLibraryElementError: Unable to find an element with the text: /invoice pdf generator/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="p-6"
+    >
+      <div
+        animate="[object Object]"
+        class="mb-8"
+        initial="[object Object]"
+      >
+        <h1
+          class="text-3xl font-bold text-white mb-2 flex items-center gap-3"
+        >
+          <div
+            class="p-3 rounded-xl bg-gradient-to-br from-teal-500/20 to-teal-500/5 border border-teal-500/20"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-file-text w-6 h-6 text-teal-400"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+              />
+              <path
+                d="M14 2v5a1 1 0 0 0 1 1h5"
+              />
+              <path
+                d="M10 9H8"
+              />
+              <path
+                d="M16 13H8"
+              />
+              <path
+                d="M16 17H8"
+              />
+            </svg>
+          </div>
+          Invoice Generator
+        </h1>
+        <p
+          class="text-gray-400"
+        >
+          Generate and print professional invoices
+        </p>
+      </div>
+      <div
+        class="grid grid-cols-1 lg:grid-cols-3 gap-6"
+      >
+        <div
+          class="lg:col-span-1"
+        >
+          <div
+            animate="[object Object]"
+            class="bg-gradient-to-br from-white/[0.06] to-white/[0.02] backdrop-blur-sm 
+                       border border-white/[0.08] rounded-2xl p-5"
+            initial="[object Object]"
+          >
+            <h2
+              class="text-lg font-semibold text-white mb-4"
+            >
+              Recent Invoices
+            </h2>
+            <div
+              class="space-y-3"
+            >
+              <div
+                class="p-4 rounded-xl cursor-pointer transition-all bg-teal-500/20 border border-teal-500/30"
+                whilehover="[object Object]"
+              >
+                <div
+                  class="flex items-center justify-between"
+                >
+                  <div>
+                    <div
+                      class="font-mono text-sm text-teal-400"
+                    >
+                      INV-2026-001
+                    </div>
+                    <div
+                      class="text-white font-medium"
+                    >
+                      Raj Patel
+                    </div>
+                  </div>
+                  <div
+                    class="text-right"
+                  >
+                    <div
+                      class="text-lg font-bold text-white"
+                    >
+                      Γé╣
+                      3,363
+                    </div>
+                    <span
+                      class="text-xs px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400"
+                    >
+                      pending
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="p-4 rounded-xl cursor-pointer transition-all bg-white/5 border border-white/5 hover:bg-white/10"
+                whilehover="[object Object]"
+              >
+                <div
+                  class="flex items-center justify-between"
+                >
+                  <div>
+                    <div
+                      class="font-mono text-sm text-teal-400"
+                    >
+                      INV-2026-002
+                    </div>
+                    <div
+                      class="text-white font-medium"
+                    >
+                      Amit Shah
+                    </div>
+                  </div>
+                  <div
+                    class="text-right"
+                  >
+                    <div
+                      class="text-lg font-bold text-white"
+                    >
+                      Γé╣
+                      5,200
+                    </div>
+                    <span
+                      class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400"
+                    >
+                      paid
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="p-4 rounded-xl cursor-pointer transition-all bg-white/5 border border-white/5 hover:bg-white/10"
+                whilehover="[object Object]"
+              >
+                <div
+                  class="flex items-center justify-between"
+                >
+                  <div>
+                    <div
+                      class="font-mono text-sm text-teal-400"
+                    >
+                      INV-2026-003
+ ...
+ Γ¥» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» src/components/__tests__/InvoicePDF.test.jsx:52:23
+     50|         );
+     51| 
+     52|         expect(screen.getByText(/invoice pdf generator/i)).toBeInTheDoΓÇª
+       |                       ^
+     53|     });
+     54| 
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/5]ΓÄ»
+
+ FAIL  src/components/__tests__/InvoicePDF.test.jsx > InvoicePDF Component > displays customer name correctly in printable invoice
+AssertionError: expected 0 to be greater than 0
+ Γ¥» src/components/__tests__/InvoicePDF.test.jsx:64:38
+     62|         // The component should have sample invoices
+     63|         const customerNames = screen.queryAllByText(/Rajesh Kumar|PriyΓÇª
+     64|         expect(customerNames.length).toBeGreaterThan(0);
+       |                                      ^
+     65|     });
+     66| 
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/5]ΓÄ»
+
+ FAIL  src/components/__tests__/JobCardPrint.test.jsx > PrintableJobCard > shows WARRANTY: YES when warranty is true
+TestingLibraryElementError: Unable to find an element with the text: WARRANTY: YES. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="bg-white text-[#333] p-0 max-w-[297mm] mx-auto min-h-[210mm] flex flex-col relative overflow-hidden"
+      id="jobcard-print"
+    >
+      <div
+        class="jc-watermark"
+      >
+        MOTOFIT
+      </div>
+      <div
+        class="jc-container"
+      >
+        <div
+          class="jc-header"
+        >
+          <div
+            class="jc-logo"
+          >
+            <img
+              alt="MotoFit Logo"
+              src="/motofit-logo.png"
+            />
+            <div
+              class="jc-logo-text"
+            >
+              MOTOFIT
+            </div>
+          </div>
+          <div
+            class="jc-company-details"
+          >
+            <div
+              class="font-bold"
+            >
+              AKSHAT MOHANTY - OWNER: 7259625881
+            </div>
+            <div
+              class="font-bold"
+            >
+              MUNNA - SR. MECHANIC: 9123293450
+            </div>
+          </div>
+        </div>
+        <div
+          class="jc-grid"
+        >
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              JOB CARD NO: 
+              JC-TEST
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                TOKEN NO:
+              </div>
+              <div
+                class="jc-input-value font-bold"
+              />
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                PROM. DATE:
+              </div>
+              <div
+                class="jc-input-value"
+              />
+            </div>
+          </div>
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              VEHICLE DETAILS
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                REG NUMBER:
+              </div>
+              <div
+                class="jc-input-value font-bold"
+              >
+                123
+              </div>
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                MAKE/MODEL:
+              </div>
+              <div
+                class="jc-input-value"
+              >
+                Test
+                 
+                Bike
+              </div>
+            </div>
+          </div>
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              REGISTRATION DETAILS
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                CHASSIS NO:
+              </div>
+              <div
+                class="jc-input-value"
+              >
+                123
+              </div>
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                ENGINE NO:
+              </div>
+              <div
+                class="jc-input-value"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="jc-grid"
+          style="grid-template-columns: 2fr 1fr;"
+        >
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              CUSTOMER DETAILS
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                NAME:
+              </div>
+              <div
+                class="jc-input-value font-bold"
+              >
+                Test User
+              </div>
+            </div>
+            <div
+              class="flex gap-4"
+            >
+              <div
+                class="jc-input-row flex-grow"
+              >
+                <div
+                  class="jc-input-label"
+                >
+                  MOBILE:
+                </div>
+                <div
+                  class="jc-input-value"
+                >
+                  123
+                </div>
+              </div>
+      ...
+ Γ¥» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» src/components/__tests__/JobCardPrint.test.jsx:52:23
+     50|     it('shows WARRANTY: YES when warranty is true', () => {
+     51|         render(<PrintableJobCard jobCard={{ ...mockJobCard, warranty: ΓÇª
+     52|         expect(screen.getByText('WARRANTY: YES')).toBeInTheDocument();
+       |                       ^
+     53|     });
+     54| 
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/5]ΓÄ»
+
+ FAIL  src/components/__tests__/JobCardPrint.test.jsx > PrintableJobCard > shows WARRANTY: NO when warranty is false
+TestingLibraryElementError: Unable to find an element with the text: WARRANTY: NO. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="bg-white text-[#333] p-0 max-w-[297mm] mx-auto min-h-[210mm] flex flex-col relative overflow-hidden"
+      id="jobcard-print"
+    >
+      <div
+        class="jc-watermark"
+      >
+        MOTOFIT
+      </div>
+      <div
+        class="jc-container"
+      >
+        <div
+          class="jc-header"
+        >
+          <div
+            class="jc-logo"
+          >
+            <img
+              alt="MotoFit Logo"
+              src="/motofit-logo.png"
+            />
+            <div
+              class="jc-logo-text"
+            >
+              MOTOFIT
+            </div>
+          </div>
+          <div
+            class="jc-company-details"
+          >
+            <div
+              class="font-bold"
+            >
+              AKSHAT MOHANTY - OWNER: 7259625881
+            </div>
+            <div
+              class="font-bold"
+            >
+              MUNNA - SR. MECHANIC: 9123293450
+            </div>
+          </div>
+        </div>
+        <div
+          class="jc-grid"
+        >
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              JOB CARD NO: 
+              JC-TEST
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                TOKEN NO:
+              </div>
+              <div
+                class="jc-input-value font-bold"
+              />
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                PROM. DATE:
+              </div>
+              <div
+                class="jc-input-value"
+              />
+            </div>
+          </div>
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              VEHICLE DETAILS
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                REG NUMBER:
+              </div>
+              <div
+                class="jc-input-value font-bold"
+              >
+                123
+              </div>
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                MAKE/MODEL:
+              </div>
+              <div
+                class="jc-input-value"
+              >
+                Test
+                 
+                Bike
+              </div>
+            </div>
+          </div>
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              REGISTRATION DETAILS
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                CHASSIS NO:
+              </div>
+              <div
+                class="jc-input-value"
+              >
+                123
+              </div>
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                ENGINE NO:
+              </div>
+              <div
+                class="jc-input-value"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="jc-grid"
+          style="grid-template-columns: 2fr 1fr;"
+        >
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              CUSTOMER DETAILS
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                NAME:
+              </div>
+              <div
+                class="jc-input-value font-bold"
+              >
+                Test User
+              </div>
+            </div>
+            <div
+              class="flex gap-4"
+            >
+              <div
+                class="jc-input-row flex-grow"
+              >
+                <div
+                  class="jc-input-label"
+                >
+                  MOBILE:
+                </div>
+                <div
+                  class="jc-input-value"
+                >
+                  123
+                </div>
+              </div>
+      ...
+ Γ¥» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» src/components/__tests__/JobCardPrint.test.jsx:57:23
+
+     55|     it('shows WARRANTY: NO when warranty is false', () => {
+     56|         render(<PrintableJobCard jobCard={{ ...mockJobCard, warranty: ΓÇª
+     57|         expect(screen.getByText('WARRANTY: NO')).toBeInTheDocument();
+       |                       ^
+     58|     });
+     59| });
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 12:40:39
+[2m   Duration [22m 2.10s[2m (transform 328ms, setup 550ms, import 1.15s, tests 316ms, environment 4.30s)[22m
+
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[5/5]ΓÄ»
+

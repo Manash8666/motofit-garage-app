@@ -1,0 +1,530 @@
+{
+    "categories": {
+        "scooter": {
+            "id": "scooter",
+            "name": "Urban Scooter",
+            "hotspots": [
+                {
+                    "id": "cvt_belt",
+                    "name": "CVT Belt Replacement",
+                    "position": [
+                        0.2,
+                        0.3,
+                        -0.3
+                    ],
+                    "type": "drivetrain",
+                    "repair_steps": 5,
+                    "parts_required": [
+                        "CVT Belt",
+                        "Variator Rollers"
+                    ],
+                    "estimated_time": 45,
+                    "difficulty": "medium",
+                    "labor_cost": 800
+                },
+                {
+                    "id": "front_brake_pad",
+                    "name": "Front Brake Pad",
+                    "position": [
+                        0.8,
+                        0.4,
+                        0.1
+                    ],
+                    "type": "brakes",
+                    "repair_steps": 3,
+                    "parts_required": [
+                        "Brake Pads",
+                        "Brake Fluid"
+                    ],
+                    "estimated_time": 30,
+                    "difficulty": "easy",
+                    "labor_cost": 400
+                },
+                {
+                    "id": "battery",
+                    "name": "Battery Replacement",
+                    "position": [
+                        -0.3,
+                        0.4,
+                        0.25
+                    ],
+                    "type": "electrical",
+                    "repair_steps": 2,
+                    "parts_required": [
+                        "12V Battery"
+                    ],
+                    "estimated_time": 15,
+                    "difficulty": "easy",
+                    "labor_cost": 200
+                },
+                {
+                    "id": "air_filter",
+                    "name": "Air Filter Service",
+                    "position": [
+                        0.1,
+                        0.5,
+                        -0.2
+                    ],
+                    "type": "engine",
+                    "repair_steps": 2,
+                    "parts_required": [
+                        "Air Filter Element"
+                    ],
+                    "estimated_time": 20,
+                    "difficulty": "easy",
+                    "labor_cost": 300
+                }
+            ]
+        },
+        "commuter_100": {
+            "id": "commuter_100",
+            "name": "Economy Commuter",
+            "hotspots": [
+                {
+                    "id": "chain_sprocket",
+                    "name": "Chain & Sprocket Kit",
+                    "position": [
+                        -0.6,
+                        0.2,
+                        0.2
+                    ],
+                    "type": "drivetrain",
+                    "repair_steps": 6,
+                    "parts_required": [
+                        "Chain",
+                        "Front Sprocket",
+                        "Rear Sprocket"
+                    ],
+                    "estimated_time": 60,
+                    "difficulty": "medium",
+                    "labor_cost": 600
+                },
+                {
+                    "id": "carburetor",
+                    "name": "Carburetor Tuning",
+                    "position": [
+                        0,
+                        0.5,
+                        0.2
+                    ],
+                    "type": "engine",
+                    "repair_steps": 4,
+                    "parts_required": [
+                        "Carburetor Kit"
+                    ],
+                    "estimated_time": 45,
+                    "difficulty": "medium",
+                    "labor_cost": 500
+                },
+                {
+                    "id": "clutch_plates",
+                    "name": "Clutch Plate Replacement",
+                    "position": [
+                        -0.1,
+                        0.3,
+                        -0.25
+                    ],
+                    "type": "engine",
+                    "repair_steps": 8,
+                    "parts_required": [
+                        "Clutch Plates",
+                        "Springs",
+                        "Gasket"
+                    ],
+                    "estimated_time": 90,
+                    "difficulty": "hard",
+                    "labor_cost": 1200
+                },
+                {
+                    "id": "spark_plug",
+                    "name": "Spark Plug Replacement",
+                    "position": [
+                        0.1,
+                        0.6,
+                        0
+                    ],
+                    "type": "engine",
+                    "repair_steps": 2,
+                    "parts_required": [
+                        "Spark Plug"
+                    ],
+                    "estimated_time": 10,
+                    "difficulty": "easy",
+                    "labor_cost": 150
+                }
+            ]
+        },
+        "sport_commuter_150": {
+            "id": "sport_commuter_150",
+            "name": "Sport Commuter",
+            "hotspots": [
+                {
+                    "id": "fuel_injection",
+                    "name": "Fuel Injector Cleaning",
+                    "position": [
+                        0.1,
+                        0.6,
+                        0.15
+                    ],
+                    "type": "engine",
+                    "repair_steps": 5,
+                    "parts_required": [
+                        "Injector Cleaner",
+                        "O-rings"
+                    ],
+                    "estimated_time": 60,
+                    "difficulty": "medium",
+                    "labor_cost": 800
+                },
+                {
+                    "id": "monoshock",
+                    "name": "Monoshock Service",
+                    "position": [
+                        -0.4,
+                        0.4,
+                        0
+                    ],
+                    "type": "suspension",
+                    "repair_steps": 6,
+                    "parts_required": [
+                        "Shock Oil",
+                        "Seals"
+                    ],
+                    "estimated_time": 90,
+                    "difficulty": "hard",
+                    "labor_cost": 1500
+                },
+                {
+                    "id": "disc_brake_front",
+                    "name": "Front Disc Brake Service",
+                    "position": [
+                        0.85,
+                        0.35,
+                        0.1
+                    ],
+                    "type": "brakes",
+                    "repair_steps": 4,
+                    "parts_required": [
+                        "Brake Pads",
+                        "Caliper Pins",
+                        "Brake Fluid"
+                    ],
+                    "estimated_time": 40,
+                    "difficulty": "medium",
+                    "labor_cost": 600
+                },
+                {
+                    "id": "oil_change",
+                    "name": "Engine Oil Change",
+                    "position": [
+                        0,
+                        0.25,
+                        0
+                    ],
+                    "type": "engine",
+                    "repair_steps": 3,
+                    "parts_required": [
+                        "Engine Oil 1L",
+                        "Oil Filter",
+                        "Drain Washer"
+                    ],
+                    "estimated_time": 25,
+                    "difficulty": "easy",
+                    "labor_cost": 300
+                }
+            ]
+        },
+        "naked_250": {
+            "id": "naked_250",
+            "name": "Naked Streetfighter",
+            "hotspots": [
+                {
+                    "id": "upside_down_forks",
+                    "name": "USD Fork Service",
+                    "position": [
+                        0.85,
+                        0.6,
+                        0
+                    ],
+                    "type": "suspension",
+                    "repair_steps": 8,
+                    "parts_required": [
+                        "Fork Oil",
+                        "Dust Seals",
+                        "Oil Seals"
+                    ],
+                    "estimated_time": 120,
+                    "difficulty": "hard",
+                    "labor_cost": 2000
+                },
+                {
+                    "id": "radial_caliper",
+                    "name": "Radial Caliper Rebuild",
+                    "position": [
+                        0.9,
+                        0.3,
+                        0.15
+                    ],
+                    "type": "brakes",
+                    "repair_steps": 6,
+                    "parts_required": [
+                        "Caliper Rebuild Kit",
+                        "Brake Fluid DOT4"
+                    ],
+                    "estimated_time": 75,
+                    "difficulty": "hard",
+                    "labor_cost": 1500
+                },
+                {
+                    "id": "throttle_body",
+                    "name": "Throttle Body Sync",
+                    "position": [
+                        0.2,
+                        0.55,
+                        0
+                    ],
+                    "type": "engine",
+                    "repair_steps": 4,
+                    "parts_required": [
+                        "Vacuum Gauge"
+                    ],
+                    "estimated_time": 45,
+                    "difficulty": "medium",
+                    "labor_cost": 700
+                }
+            ]
+        },
+        "classic_500": {
+            "id": "classic_500",
+            "name": "Retro Classic",
+            "hotspots": [
+                {
+                    "id": "valve_adjustment",
+                    "name": "Valve Clearance Adjustment",
+                    "position": [
+                        0.1,
+                        0.6,
+                        0
+                    ],
+                    "type": "engine",
+                    "repair_steps": 6,
+                    "parts_required": [
+                        "Feeler Gauge",
+                        "Valve Cover Gasket"
+                    ],
+                    "estimated_time": 60,
+                    "difficulty": "medium",
+                    "labor_cost": 800
+                },
+                {
+                    "id": "spoke_wheel",
+                    "name": "Spoke Wheel Truing",
+                    "position": [
+                        0.8,
+                        0.35,
+                        0
+                    ],
+                    "type": "body",
+                    "repair_steps": 8,
+                    "parts_required": [
+                        "Spoke Wrench"
+                    ],
+                    "estimated_time": 90,
+                    "difficulty": "hard",
+                    "labor_cost": 1000
+                },
+                {
+                    "id": "twin_shocks",
+                    "name": "Rear Twin Shock Service",
+                    "position": [
+                        -0.5,
+                        0.5,
+                        0.15
+                    ],
+                    "type": "suspension",
+                    "repair_steps": 4,
+                    "parts_required": [
+                        "Shock Bushings",
+                        "Grease"
+                    ],
+                    "estimated_time": 45,
+                    "difficulty": "medium",
+                    "labor_cost": 600
+                }
+            ]
+        },
+        "sport_650": {
+            "id": "sport_650",
+            "name": "Full Fairing Sport",
+            "hotspots": [
+                {
+                    "id": "fairing_removal",
+                    "name": "Fairing Panel Removal",
+                    "position": [
+                        0.4,
+                        0.6,
+                        0.3
+                    ],
+                    "type": "body",
+                    "repair_steps": 10,
+                    "parts_required": [
+                        "Fairing Clips",
+                        "Rubber Grommets"
+                    ],
+                    "estimated_time": 60,
+                    "difficulty": "medium",
+                    "labor_cost": 500
+                },
+                {
+                    "id": "slipper_clutch",
+                    "name": "Slipper Clutch Service",
+                    "position": [
+                        -0.15,
+                        0.35,
+                        -0.25
+                    ],
+                    "type": "engine",
+                    "repair_steps": 12,
+                    "parts_required": [
+                        "Clutch Kit",
+                        "Springs",
+                        "Gaskets"
+                    ],
+                    "estimated_time": 180,
+                    "difficulty": "expert",
+                    "labor_cost": 3000
+                },
+                {
+                    "id": "stainless_lines",
+                    "name": "Braided Brake Line Install",
+                    "position": [
+                        0.7,
+                        0.5,
+                        0.1
+                    ],
+                    "type": "brakes",
+                    "repair_steps": 6,
+                    "parts_required": [
+                        "SS Brake Lines",
+                        "Banjo Bolts",
+                        "Brake Fluid"
+                    ],
+                    "estimated_time": 90,
+                    "difficulty": "hard",
+                    "labor_cost": 1200
+                }
+            ]
+        },
+        "cruiser_900": {
+            "id": "cruiser_900",
+            "name": "Modern Cruiser",
+            "hotspots": [
+                {
+                    "id": "vtwin_service",
+                    "name": "V-Twin Engine Service",
+                    "position": [
+                        0,
+                        0.4,
+                        0
+                    ],
+                    "type": "engine",
+                    "repair_steps": 8,
+                    "parts_required": [
+                        "Oil 3L",
+                        "Oil Filter",
+                        "Air Filter",
+                        "Spark Plugs x2"
+                    ],
+                    "estimated_time": 75,
+                    "difficulty": "medium",
+                    "labor_cost": 1500
+                },
+                {
+                    "id": "belt_drive",
+                    "name": "Belt Drive Inspection",
+                    "position": [
+                        -0.7,
+                        0.25,
+                        0.2
+                    ],
+                    "type": "drivetrain",
+                    "repair_steps": 4,
+                    "parts_required": [
+                        "Belt Tension Gauge"
+                    ],
+                    "estimated_time": 30,
+                    "difficulty": "easy",
+                    "labor_cost": 400
+                },
+                {
+                    "id": "forward_controls",
+                    "name": "Forward Controls Adjustment",
+                    "position": [
+                        -0.3,
+                        0.2,
+                        0.25
+                    ],
+                    "type": "body",
+                    "repair_steps": 3,
+                    "parts_required": [
+                        "Foot Peg Rubbers"
+                    ],
+                    "estimated_time": 20,
+                    "difficulty": "easy",
+                    "labor_cost": 300
+                },
+                {
+                    "id": "drag_bars",
+                    "name": "Handlebar Replacement",
+                    "position": [
+                        0.6,
+                        1.0,
+                        0
+                    ],
+                    "type": "body",
+                    "repair_steps": 5,
+                    "parts_required": [
+                        "Drag Bars",
+                        "Grips",
+                        "Bar-end Weights"
+                    ],
+                    "estimated_time": 45,
+                    "difficulty": "medium",
+                    "labor_cost": 600
+                }
+            ]
+        }
+    },
+    "repair_types": {
+        "engine": {
+            "color": "#EF4444",
+            "label": "Engine",
+            "icon": "wrench"
+        },
+        "brakes": {
+            "color": "#F59E0B",
+            "label": "Brakes",
+            "icon": "disc"
+        },
+        "suspension": {
+            "color": "#3B82F6",
+            "label": "Suspension",
+            "icon": "spring"
+        },
+        "electrical": {
+            "color": "#8B5CF6",
+            "label": "Electrical",
+            "icon": "zap"
+        },
+        "drivetrain": {
+            "color": "#10B981",
+            "label": "Drivetrain",
+            "icon": "cog"
+        },
+        "body": {
+            "color": "#6B7280",
+            "label": "Body",
+            "icon": "frame"
+        }
+    }
+}

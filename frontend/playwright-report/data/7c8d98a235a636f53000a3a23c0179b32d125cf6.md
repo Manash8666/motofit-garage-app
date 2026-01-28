@@ -1,0 +1,163 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e13]:
+          - heading "MotoFit 2" [level=1] [ref=e14]
+          - paragraph [ref=e15]: Tactical Command
+      - navigation [ref=e16]:
+        - button "Command Center" [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
+          - generic [ref=e22]: Command Center
+        - button "3D Viewer" [ref=e23] [cursor=pointer]:
+          - img [ref=e24]
+          - generic [ref=e29]: 3D Viewer
+        - button "Repair Ops" [ref=e30] [cursor=pointer]:
+          - img [ref=e31]
+          - generic [ref=e33]: Repair Ops
+        - button "Inventory" [ref=e34] [cursor=pointer]:
+          - img [ref=e35]
+          - generic [ref=e38]: Inventory
+        - button "Bikes Database" [ref=e39] [cursor=pointer]:
+          - img [ref=e40]
+          - generic [ref=e44]: Bikes Database
+        - button "Service History" [ref=e45] [cursor=pointer]:
+          - img [ref=e46]
+          - generic [ref=e49]: Service History
+        - button "Warranty Claims" [ref=e50] [cursor=pointer]:
+          - img [ref=e51]
+          - generic [ref=e53]: Warranty Claims
+        - button "Reports" [ref=e54] [cursor=pointer]:
+          - img [ref=e55]
+          - generic [ref=e56]: Reports
+        - button "Invoices" [ref=e57] [cursor=pointer]:
+          - img [ref=e58]
+          - generic [ref=e60]: Invoices
+        - button "Job Cards" [ref=e61] [cursor=pointer]:
+          - img [ref=e62]
+          - generic [ref=e65]: Job Cards
+        - button "Profile" [ref=e66] [cursor=pointer]:
+          - img [ref=e67]
+          - generic [ref=e70]: Profile
+      - button [ref=e72] [cursor=pointer]:
+        - img [ref=e73]
+  - main [ref=e76]:
+    - generic [ref=e78]:
+      - heading "Repair Ops" [level=2] [ref=e80]
+      - generic [ref=e81]:
+        - generic [ref=e84]: Online
+        - generic [ref=e87]: green
+        - button "3" [ref=e88] [cursor=pointer]:
+          - img [ref=e89]
+          - generic [ref=e92]: "3"
+        - button "CS" [ref=e93] [cursor=pointer]:
+          - generic [ref=e95]: CS
+    - generic [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - heading "Tactical Repair Ops" [level=2] [ref=e101]:
+            - img [ref=e102]
+            - text: Tactical Repair Ops
+          - paragraph [ref=e104]: Live Mission Control & Deployment
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - img [ref=e107]
+            - textbox "Search missions..." [ref=e110]
+          - button "New Mission" [ref=e111] [cursor=pointer]:
+            - img [ref=e112]
+            - text: New Mission
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e116]:
+            - img [ref=e117]
+            - heading "Pending Deployment" [level=3] [ref=e120]
+            - generic [ref=e121]: "1"
+          - generic [ref=e126]:
+            - generic [ref=e127]:
+              - generic [ref=e128]: JC-001
+              - button "Move Forward" [ref=e130] [cursor=pointer]:
+                - img [ref=e131]
+            - heading "Basic Service" [level=4] [ref=e133]:
+              - img [ref=e134]
+              - text: Basic Service
+            - generic [ref=e136]: "Vehicle ID: v1"
+            - generic [ref=e137]:
+              - generic [ref=e138]:
+                - img [ref=e139]
+                - text: Bay 1
+              - generic [ref=e141]: ₹3,200
+        - generic [ref=e142]:
+          - generic [ref=e144]:
+            - img [ref=e145]
+            - heading "Active Operations" [level=3] [ref=e147]
+            - generic [ref=e148]: "1"
+          - generic [ref=e153]:
+            - generic [ref=e154]:
+              - generic [ref=e155]: JC-002
+              - generic [ref=e156]:
+                - button "Move Back" [ref=e157] [cursor=pointer]:
+                  - img [ref=e158]
+                - button "Move Forward" [ref=e160] [cursor=pointer]:
+                  - img [ref=e161]
+            - heading "Engine Overhaul" [level=4] [ref=e163]:
+              - img [ref=e164]
+              - text: Engine Overhaul
+            - generic [ref=e166]: "Vehicle ID: v2"
+            - generic [ref=e167]:
+              - generic [ref=e168]:
+                - img [ref=e169]
+                - text: Bay 2
+              - generic [ref=e171]: ₹8,500
+        - generic [ref=e172]:
+          - generic [ref=e174]:
+            - img [ref=e175]
+            - heading "Mission Complete" [level=3] [ref=e178]
+            - generic [ref=e179]: "0"
+          - generic [ref=e181]: No Missions
+      - generic [ref=e184]:
+        - generic [ref=e185]:
+          - heading "Initialize New Mission" [level=3] [ref=e186]
+          - button [ref=e187] [cursor=pointer]:
+            - img [ref=e188]
+        - generic [ref=e191]:
+          - generic [ref=e192]:
+            - generic [ref=e193]: Vehicle ID / Name
+            - textbox "e.g. GJ-01-AB-1234" [ref=e194]
+          - generic [ref=e195]:
+            - generic [ref=e196]:
+              - generic [ref=e197]: Priority Level
+              - combobox [ref=e198]:
+                - option "Standard (Yellow)" [selected]
+                - option "Urgent (Orange)"
+                - option "Critical (Red)"
+            - generic [ref=e199]:
+              - generic [ref=e200]: Status
+              - combobox [ref=e201]:
+                - option "Pending" [selected]
+                - option "Repairing"
+                - option "Completed"
+            - generic [ref=e202]:
+              - generic [ref=e203]: Est. Cost
+              - spinbutton [ref=e204]: "0"
+            - generic [ref=e205]:
+              - generic [ref=e206]: Assign Bay
+              - combobox [ref=e207]:
+                - option "No Bay Assigned" [selected]
+                - option "Bay 2 (Available)"
+          - generic [ref=e208]:
+            - generic [ref=e209]: Mission Objective
+            - textbox "e.g. Engine Diagnostic, Oil Change" [active] [ref=e210]: Engine Repair
+          - generic [ref=e211]:
+            - generic [ref=e212]: Warranty Coverage
+            - combobox [ref=e213]:
+              - option "No Coverage" [selected]
+              - option "Yes - Under Warranty"
+            - paragraph [ref=e214]: "*Warranty applies only to approved Engine Repair work"
+          - generic [ref=e215]:
+            - button "Cancel" [ref=e216] [cursor=pointer]
+            - button "Deploy Mission" [ref=e217] [cursor=pointer]
+```

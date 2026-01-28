@@ -1,0 +1,304 @@
+
+> frontend@0.0.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.17 [39m[90mC:/Users/Manas/OneDrive/Desktop/MotoFit App/frontend[39m
+
+[90mstdout[2m | src/utils/__tests__/api.test.js[2m > [22m[2mAPI Utility Functions[2m > [22m[2mapiRequest wrapper[2m > [22m[2muses fallback when offline and fallback provided
+[22m[39m≡ƒô┤ Offline mode - using cached data
+
+[90mstdout[2m | src/utils/__tests__/api.test.js[2m > [22m[2mAPI Utility Functions[2m > [22m[2mapiRequest wrapper[2m > [22m[2mfalls back to cached data when request fails
+[22m[39mΓÜá∩╕Å Falling back to cached data
+
+stderr | src/utils/__tests__/api.test.js > API Utility Functions > apiRequest wrapper > falls back to cached data when request fails
+API request failed: Error: Network error
+    at C:/Users/Manas/OneDrive/Desktop/MotoFit App/frontend/src/utils/__tests__/api.test.js:85:59
+    at file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:145:11
+    at file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:915:26
+    at file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:1209:10)
+    at file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:1653:37
+    at Traces.$ (file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/vitest/dist/chunks/traces.CCmnQaNT.js:142:27)
+    at trace (file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/vitest/dist/chunks/test.B8ej_ZHS.js:239:21)
+    at runTest (file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:1653:12)
+
+stderr | src/utils/__tests__/api.test.js > API Utility Functions > apiRequest wrapper > throws error when request fails and no fallback
+API request failed: Error: Network error
+    at C:/Users/Manas/OneDrive/Desktop/MotoFit App/frontend/src/utils/__tests__/api.test.js:96:59
+    at file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:145:11
+    at file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:915:26
+    at file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:1209:10)
+    at file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:1653:37
+    at Traces.$ (file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/vitest/dist/chunks/traces.CCmnQaNT.js:142:27)
+    at trace (file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/vitest/dist/chunks/test.B8ej_ZHS.js:239:21)
+    at runTest (file:///C:/Users/Manas/OneDrive/Desktop/MotoFit%20App/frontend/node_modules/@vitest/runner/dist/index.js:1653:12)
+
+ [32mΓ£ô[39m src/utils/__tests__/api.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32mΓ£ô[39m src/stores/__tests__/hybridStore.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+stderr | src/components/__tests__/InvoicePDF.test.jsx > InvoicePDF Component > renders invoice list when no invoice is selected
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [32mΓ£ô[39m src/components/__tests__/InvoicePDF.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[32m 184[2mms[22m[39m
+ [31mΓ¥»[39m src/components/__tests__/JobCardPrint.test.jsx [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 110[2mms[22m[39m
+     [32mΓ£ô[39m does NOT show warranty badge when warranty is undefined[32m 73[2mms[22m[39m
+     [32mΓ£ô[39m renders job card with customer details[32m 14[2mms[22m[39m
+[31m     [31m├ù[31m renders job card with vehicle registration[39m[32m 22[2mms[22m[39m
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  src/components/__tests__/JobCardPrint.test.jsx > PrintableJobCard > renders job card with vehicle registration
+TestingLibraryElementError: Found multiple elements with the text: 123
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<div
+  class="jc-input-value font-bold"
+>
+  123
+</div>
+
+Ignored nodes: comments, script, style
+<div
+  class="jc-input-value"
+>
+  123
+</div>
+
+Ignored nodes: comments, script, style
+<div
+  class="jc-input-value"
+>
+  123
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="bg-white text-[#333] p-0 max-w-[297mm] mx-auto min-h-[210mm] flex flex-col relative overflow-hidden"
+      id="jobcard-print"
+    >
+      <div
+        class="jc-watermark"
+      >
+        MOTOFIT
+      </div>
+      <div
+        class="jc-container"
+      >
+        <div
+          class="jc-header"
+        >
+          <div
+            class="jc-logo"
+          >
+            <img
+              alt="MotoFit Logo"
+              src="/motofit-logo.png"
+            />
+            <div
+              class="jc-logo-text"
+            >
+              MOTOFIT
+            </div>
+          </div>
+          <div
+            class="jc-company-details"
+          >
+            <div
+              class="font-bold"
+            >
+              AKSHAT MOHANTY - OWNER: 7259625881
+            </div>
+            <div
+              class="font-bold"
+            >
+              MUNNA - SR. MECHANIC: 9123293450
+            </div>
+          </div>
+        </div>
+        <div
+          class="jc-grid"
+        >
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              JOB CARD NO: 
+              JC-TEST
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                TOKEN NO:
+              </div>
+              <div
+                class="jc-input-value font-bold"
+              />
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                PROM. DATE:
+              </div>
+              <div
+                class="jc-input-value"
+              />
+            </div>
+          </div>
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              VEHICLE DETAILS
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                REG NUMBER:
+              </div>
+              <div
+                class="jc-input-value font-bold"
+              >
+                123
+              </div>
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                MAKE/MODEL:
+              </div>
+              <div
+                class="jc-input-value"
+              >
+                Test
+                 
+                Bike
+              </div>
+            </div>
+          </div>
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              REGISTRATION DETAILS
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                CHASSIS NO:
+              </div>
+              <div
+                class="jc-input-value"
+              >
+                123
+              </div>
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                ENGINE NO:
+              </div>
+              <div
+                class="jc-input-value"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="jc-grid"
+          style="grid-template-columns: 2fr 1fr;"
+        >
+          <div
+            class="jc-section"
+          >
+            <div
+              class="jc-section-title"
+            >
+              CUSTOMER DETAILS
+            </div>
+            <div
+              class="jc-input-row"
+            >
+              <div
+                class="jc-input-label"
+              >
+                NAME:
+              </div>
+              <div
+                class="jc-input-value font-bold"
+              >
+                Test User
+              </div>
+            </div>
+            <div
+              class="flex gap-4"
+            >
+              <div
+                class="jc-input-row flex-grow"
+              >
+                <div
+                  class="jc-input-label"
+                >
+                  MOBILE:
+                </div>
+                <div
+                  class="jc-input-value"
+                >
+                  123
+                </div>
+              </div>
+      ...
+ Γ¥» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ Γ¥» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ Γ¥» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» src/components/__tests__/JobCardPrint.test.jsx:57:23
+     55|     it('renders job card with vehicle registration', () => {
+     56|         render(<PrintableJobCard jobCard={mockJobCard} copyType="motofΓÇª
+     57|         expect(screen.getByText('123')).toBeInTheDocument(); // regNo
+       |                       ^
+     58|     });
+     59| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ»
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m23 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m 12:42:20
+[2m   Duration [22m 2.26s[2m (transform 291ms, setup 647ms, import 1.18s, tests 336ms, environment 4.77s)[22m
+

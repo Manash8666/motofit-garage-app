@@ -1,0 +1,15 @@
+{
+    "version": 2,
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "/api/$1"
+        }
+    ],
+    "crons": [
+        {
+            "path": "/api/cron/lead-sync",
+            "schedule": "*/10 * * * *"
+        }
+    ]
+}
