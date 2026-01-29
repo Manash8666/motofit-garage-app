@@ -1,5 +1,5 @@
 /**
- * Script to create/update default admin user in TiDB
+ * Script to create/update owner user in TiDB
  * Run: node create-admin.js
  */
 const mysql = require('mysql2/promise');
@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 require('dotenv').config();
 
-async function createAdminUser() {
+async function createOwnerUser() {
     let connection;
     try {
         console.log('🔌 Connecting to TiDB...');
@@ -27,6 +27,12 @@ async function createAdminUser() {
         connection = await mysql.createConnection(config);
         console.log('✅ Connected.');
 
+        // Owner Details
+        const ownerUsername = 'akshat';
+        const ownerPassword = 'Motofit@2026';
+        const ownerEmail = 'akshatmohanty@gmail.com';
+        const ownerPhone = '+91-7259625881';
+
         // 1. Ensure Table Exists
         await connection.execute(`
             CREATE TABLE IF NOT EXISTS users (
@@ -35,35 +41,49 @@ async function createAdminUser() {
                 password_hash VARCHAR(255),
                 role VARCHAR(50) DEFAULT 'User',
                 email VARCHAR(255),
+                phone VARCHAR(20),
                 allowed_ips TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         `);
 
-        // 2. Hash Password
-        const passwordHash = await bcrypt.hash('123', 10);
-        const adminId = crypto.randomUUID();
+        // Add phone column if it doesn't exist
+        try {
+            await connection.execute('ALTER TABLE users ADD COLUMN phone VARCHAR(20)');
+        } catch (e) {
+            // Column may already exist
+        }
 
-        // 3. Upsert Admin
-        const [existing] = await connection.execute('SELECT * FROM users WHERE username = ?', ['admin']);
+        // 2. Hash Password
+        const passwordHash = await bcrypt.hash(ownerPassword, 10);
+        const ownerId = crypto.randomUUID();
+
+        // 3. Upsert Owner
+        const [existing] = await connection.execute('SELECT * FROM users WHERE username = ?', [ownerUsername]);
 
         if (existing.length > 0) {
-            console.log('🔄 Updating existing admin user password...');
+            console.log('🔄 Updating existing owner...');
             await connection.execute(
-                'UPDATE users SET password_hash = ? WHERE username = ?',
-                [passwordHash, 'admin']
+                'UPDATE users SET password_hash = ?, email = ?, phone = ?, role = ? WHERE username = ?',
+                [passwordHash, ownerEmail, ownerPhone, 'Owner', ownerUsername]
             );
         } else {
-            console.log('➕ Creating new admin user...');
+            console.log('➕ Creating owner user...');
             await connection.execute(
-                'INSERT INTO users (id, username, role, email, password_hash) VALUES (?, ?, ?, ?, ?)',
-                [adminId, 'admin', 'Owner', 'admin@motofit.com', passwordHash]
+                'INSERT INTO users (id, username, password_hash, role, email, phone) VALUES (?, ?, ?, ?, ?, ?)',
+                [ownerId, ownerUsername, passwordHash, 'Owner', ownerEmail, ownerPhone]
             );
         }
 
-        console.log('✅ Admin user ready!');
-        console.log('   Username: admin');
-        console.log('   Password: 123');
+        // 4. Delete demo admin if exists
+        await connection.execute('DELETE FROM users WHERE username = ?', ['admin']);
+        console.log('🗑️ Removed demo admin user.');
+
+        console.log('');
+        console.log('✅ Owner account ready!');
+        console.log('   Username: akshat');
+        console.log('   Password: Motofit@2026');
+        console.log('   Email: akshatmohanty@gmail.com');
         console.log('   Role: Owner');
 
     } catch (error) {
@@ -74,4 +94,4 @@ async function createAdminUser() {
     }
 }
 
-createAdminUser();
+createOwnerUser();
