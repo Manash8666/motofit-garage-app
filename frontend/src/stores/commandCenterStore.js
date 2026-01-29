@@ -5,66 +5,16 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-// Initial mission data
-const INITIAL_MISSIONS = [
-    {
-        id: '1',
-        missionCode: 'JC-001',
-        vehicleId: 'v1',
-        customerId: 'c1',
-        priority: 'yellow',
-        status: 'pending',
-        bay: 1,
-        estimatedCost: 3200,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        services: ['Basic Service'],
-        parts: [],
-    },
-    {
-        id: '2',
-        missionCode: 'JC-002',
-        vehicleId: 'v2',
-        customerId: 'c2',
-        priority: 'red',
-        status: 'in-progress',
-        bay: 2,
-        assignedMechanic: 'm1',
-        estimatedCost: 8500,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        services: ['Engine Overhaul'],
-        parts: ['Piston Kit'],
-    },
-];
-
-const INITIAL_MECHANICS = [
-    { id: 'm1', name: 'Vikram Singh', specialty: 'Engine', status: 'busy', efficiency: 95 },
-    { id: 'm2', name: 'Amit Patel', specialty: 'Electrical', status: 'active', efficiency: 88 },
-    { id: 'm3', name: 'Rahul Sharma', specialty: 'Suspension', status: 'active', efficiency: 92 },
-];
-
+// Initial data - empty arrays (data comes from backend API)
+const INITIAL_MISSIONS = [];
+const INITIAL_MECHANICS = [];
 const INITIAL_BAYS = [
-    { id: 1, status: 'occupied', currentMission: '1', progress: 45, vehicleType: 'motorcycle' },
+    { id: 1, status: 'available', progress: 0 },
     { id: 2, status: 'available', progress: 0 },
 ];
-
-const INITIAL_INVENTORY = [
-    { id: 'p1', name: 'High-Perf Oil Filter', category: 'Maintenance', stock: 12, minStock: 5, price: 350, location: 'A-1' },
-    { id: 'p2', name: 'Ceramic Brake Pads', category: 'Safety', stock: 8, minStock: 4, price: 1200, location: 'B-3' },
-    { id: 'p3', name: 'Chain Lube (Spray)', category: 'Maintenance', stock: 4, minStock: 6, price: 450, location: 'C-2' },
-    { id: 'p4', name: 'Spark Plug (Iridium)', category: 'Engine', stock: 20, minStock: 10, price: 800, location: 'A-2' },
-    { id: 'p5', name: 'Air Filter', category: 'Maintenance', stock: 3, minStock: 5, price: 600, location: 'A-3' },
-];
-
-const INITIAL_SUPPLIERS = [
-    { id: 's1', name: 'MotoParts Hub', contact: 'Rahul Verma', phone: '+91 98765 43210', rating: 4.8, category: 'General' },
-    { id: 's2', name: 'Speedy Spares', contact: 'Amit Shah', phone: '+91 98989 89898', rating: 4.2, category: 'Performance' },
-];
-
-const INITIAL_ORDERS = [
-    { id: 'po1', supplierId: 's1', items: 5, total: 12500, status: 'pending', date: new Date().toISOString() },
-];
+const INITIAL_INVENTORY = [];
+const INITIAL_SUPPLIERS = [];
+const INITIAL_ORDERS = [];
 
 export const useCommandCenterStore = create(
     devtools(

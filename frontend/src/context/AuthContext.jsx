@@ -49,42 +49,8 @@ const ROLE_PERMISSIONS = {
     ],
 };
 
-// Sample users database
-const USERS_DB = [
-    {
-        id: 1,
-        username: 'commander',
-        password: 'admin123', // In production, would be hashed
-        name: 'Commander Singh',
-        email: 'commander@motofit.in',
-        role: ROLES.COMMANDER,
-        avatar: 'CS',
-        phone: '9876543210',
-        lastLogin: '2026-01-16T09:00:00',
-    },
-    {
-        id: 2,
-        username: 'manager',
-        password: 'manager123',
-        name: 'Priya Sharma',
-        email: 'priya@motofit.in',
-        role: ROLES.MANAGER,
-        avatar: 'PS',
-        phone: '9876543211',
-        lastLogin: '2026-01-15T18:30:00',
-    },
-    {
-        id: 3,
-        username: 'mechanic',
-        password: 'mech123',
-        name: 'Vikram Singh',
-        email: 'vikram@motofit.in',
-        role: ROLES.MECHANIC,
-        avatar: 'VS',
-        phone: '9876543212',
-        lastLogin: '2026-01-16T08:00:00',
-    },
-];
+// Users database - empty (authentication is via backend API)
+const USERS_DB = [];
 
 // Auth Context
 const AuthContext = createContext(null);

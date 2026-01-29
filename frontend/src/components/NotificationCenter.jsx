@@ -19,59 +19,8 @@ import {
     User,
 } from 'lucide-react';
 
-// Sample notifications data
-const SAMPLE_NOTIFICATIONS = [
-    {
-        id: 1,
-        type: 'job',
-        title: 'Job JC-002 Completed',
-        message: 'TVS Apache repair completed by Vikram Singh',
-        time: '2 minutes ago',
-        read: false,
-        priority: 'normal',
-        icon: Wrench,
-    },
-    {
-        id: 2,
-        type: 'alert',
-        title: 'Low Stock Alert',
-        message: 'Engine Oil (20W-50) is below minimum threshold',
-        time: '15 minutes ago',
-        read: false,
-        priority: 'high',
-        icon: AlertTriangle,
-    },
-    {
-        id: 3,
-        type: 'system',
-        title: 'Bay 4 Maintenance Due',
-        message: 'Scheduled maintenance for Bay 4 is due today',
-        time: '1 hour ago',
-        read: false,
-        priority: 'medium',
-        icon: Info,
-    },
-    {
-        id: 4,
-        type: 'job',
-        title: 'New Job Assigned',
-        message: 'Honda Activa brake service assigned to Bay 2',
-        time: '2 hours ago',
-        read: true,
-        priority: 'normal',
-        icon: Wrench,
-    },
-    {
-        id: 5,
-        type: 'inventory',
-        title: 'Parts Received',
-        message: 'Order #PO-2024-089 received (15 items)',
-        time: '3 hours ago',
-        read: true,
-        priority: 'normal',
-        icon: Package,
-    },
-];
+// Notifications data - empty (real notifications will come from backend/realtime)
+const SAMPLE_NOTIFICATIONS = [];
 
 // Notification Item Component
 const NotificationItem = ({ notification, onMarkRead, onDelete }) => {
