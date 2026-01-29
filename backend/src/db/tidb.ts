@@ -1,51 +1,42 @@
-import mysql from 'mysql2/promise';
-import { connect } from '@tidbcloud/serverless';
+import { connect, Connection } from '@tidbcloud/serverless';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// TiDB connection configuration
-const config = {
-    host: process.env.TIDB_HOST,
-    port: parseInt(process.env.TIDB_PORT || '4000'),
-    user: process.env.TIDB_USER,
-    password: process.env.TIDB_PASSWORD,
-    database: process.env.TIDB_DATABASE || 'motofit',
-    ssl: {
-        minVersion: 'TLSv1.2',
-        rejectUnauthorized: true
-    },
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-};
-
-// Connection pool for traditional MySQL protocol
-let pool: mysql.Pool | null = null;
-
-export function getPool(): mysql.Pool {
-    if (!pool) {
-        pool = mysql.createPool(config);
+// Build connection URL from individual env vars if TIDB_CONNECTION_STRING is not set
+function getConnectionUrl(): string {
+    if (process.env.TIDB_CONNECTION_STRING) {
+        return process.env.TIDB_CONNECTION_STRING;
     }
-    return pool;
+
+    const host = process.env.TIDB_HOST;
+    const user = process.env.TIDB_USER;
+    const password = process.env.TIDB_PASSWORD;
+    const database = process.env.TIDB_DATABASE || 'test';
+    const port = process.env.TIDB_PORT || '4000';
+
+    if (!host || !user || !password) {
+        throw new Error('TiDB connection not configured. Set TIDB_HOST, TIDB_USER, TIDB_PASSWORD');
+    }
+
+    return `mysql://${user}:${password}@${host}:${port}/${database}?ssl={"rejectUnauthorized":true}`;
 }
 
-// Export pool getter for route files
-export { pool };
+// Get serverless connection
+let conn: Connection | null = null;
 
-// TiDB Cloud Serverless connection (alternative method)
-export function getTiDBServerless() {
-    if (!process.env.TIDB_CONNECTION_STRING) {
-        throw new Error('TIDB_CONNECTION_STRING not configured');
+export function getConnection(): Connection {
+    if (!conn) {
+        conn = connect({ url: getConnectionUrl() });
     }
-    return connect({ url: process.env.TIDB_CONNECTION_STRING });
+    return conn;
 }
 
 // Helper function for executing queries
 export async function query<T = any>(sql: string, params?: any[]): Promise<T[]> {
-    const connection = getPool();
-    const [rows] = await connection.execute(sql, params);
-    return rows as T[];
+    const connection = getConnection();
+    const result = await connection.execute(sql, params);
+    return result as T[];
 }
 
 // Helper function for single row queries
@@ -57,21 +48,11 @@ export async function queryOne<T = any>(sql: string, params?: any[]): Promise<T 
 // Test database connection
 export async function testConnection(): Promise<boolean> {
     try {
-        const connection = getPool();
-        await connection.execute('SELECT 1');
+        await query('SELECT 1');
         console.log('✅ TiDB connection successful');
         return true;
     } catch (error) {
         console.error('❌ TiDB connection failed:', error);
         return false;
-    }
-}
-
-// Graceful shutdown
-export async function closeConnection(): Promise<void> {
-    if (pool) {
-        await pool.end();
-        pool = null;
-        console.log('TiDB connection pool closed');
     }
 }
