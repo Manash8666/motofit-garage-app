@@ -217,16 +217,27 @@ const IntegratedApp = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [isAuthenticated, setIsAuthenticated] = useState(true);
+    // Check localStorage for existing auth token on mount
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+        return !!localStorage.getItem('auth_token');
+    });
     const [notificationsOpen, setNotificationsOpen] = useState(false);
     const [showTimeoutWarning, setShowTimeoutWarning] = useState(false);
     const [timeoutSeconds, setTimeoutSeconds] = useState(60);
 
-    // Session timeout handling
-    const handleSessionLogout = () => {
+    // Proper logout handler - clears all auth data
+    const handleLogout = () => {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('motofit_user');
         setIsAuthenticated(false);
         setShowTimeoutWarning(false);
         navigate('/');
+        logLogout();
+    };
+
+    // Session timeout handling
+    const handleSessionLogout = () => {
+        handleLogout();
     };
 
     const handleTimeoutWarning = (seconds) => {
@@ -425,7 +436,7 @@ const IntegratedApp = () => {
                                         <Route path="/reports" element={<ReportsAnalytics />} />
                                         <Route path="/invoices" element={<InvoicePDF />} />
                                         <Route path="/job-cards" element={<JobCardPrint />} />
-                                        <Route path="/profile" element={<UserProfile onLogout={() => setIsAuthenticated(false)} />} />
+                                        <Route path="/profile" element={<UserProfile onLogout={handleLogout} />} />
                                         <Route path="/sync-test" element={<OfflineTestDemo />} />
                                         <Route path="/quotes" element={<QuoteManagement />} />
                                         <Route path="/payments" element={<PaymentManagement />} />
