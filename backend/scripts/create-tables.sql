@@ -1,7 +1,7 @@
--- MotoFit Database Schema for TiDB
--- Run this script to create all necessary tables
+-- 1. Select the database first
+USE test;
 
--- Customers table
+-- 2. Create tables
 CREATE TABLE IF NOT EXISTS customers (
     id VARCHAR(50) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS customers (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Bikes/Vehicles table
 CREATE TABLE IF NOT EXISTS bikes (
     id VARCHAR(50) PRIMARY KEY,
     customer_id VARCHAR(50),
@@ -21,11 +20,9 @@ CREATE TABLE IF NOT EXISTS bikes (
     year INT,
     registration_no VARCHAR(50),
     color VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Services catalog table
 CREATE TABLE IF NOT EXISTS services (
     id VARCHAR(50) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -36,41 +33,34 @@ CREATE TABLE IF NOT EXISTS services (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Jobs/Job Cards table
 CREATE TABLE IF NOT EXISTS jobs (
     id VARCHAR(50) PRIMARY KEY,
-    job_no VARCHAR(50) UNIQUE,
+    job_no VARCHAR(50),
     customer_id VARCHAR(50),
     vehicle_id VARCHAR(50),
-    status ENUM('pending', 'in-progress', 'completed', 'cancelled') DEFAULT 'pending',
-    priority ENUM('low', 'normal', 'high', 'critical') DEFAULT 'normal',
+    status VARCHAR(20) DEFAULT 'pending',
+    priority VARCHAR(20) DEFAULT 'normal',
     services JSON,
     total_amount DECIMAL(10, 2) DEFAULT 0,
     notes TEXT,
     assigned_to VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    completed_at TIMESTAMP NULL,
-    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL,
-    FOREIGN KEY (vehicle_id) REFERENCES bikes(id) ON DELETE SET NULL
+    completed_at TIMESTAMP NULL
 );
 
--- Payments table
 CREATE TABLE IF NOT EXISTS payments (
     id VARCHAR(50) PRIMARY KEY,
     job_id VARCHAR(50),
     customer_id VARCHAR(50),
     amount DECIMAL(10, 2) NOT NULL,
-    method ENUM('cash', 'card', 'upi', 'bank_transfer') DEFAULT 'cash',
-    status ENUM('pending', 'completed', 'failed', 'refunded') DEFAULT 'completed',
+    method VARCHAR(20) DEFAULT 'cash',
+    status VARCHAR(20) DEFAULT 'completed',
     reference_no VARCHAR(100),
     notes TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE SET NULL,
-    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Inventory/Parts table
 CREATE TABLE IF NOT EXISTS inventory (
     id VARCHAR(50) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -83,20 +73,29 @@ CREATE TABLE IF NOT EXISTS inventory (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Mechanics/Staff table
 CREATE TABLE IF NOT EXISTS mechanics (
     id VARCHAR(50) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     specialty VARCHAR(100),
     phone VARCHAR(20),
-    status ENUM('active', 'busy', 'off') DEFAULT 'active',
+    status VARCHAR(20) DEFAULT 'active',
     efficiency INT DEFAULT 80,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Add indexes for better performance
-CREATE INDEX idx_jobs_status ON jobs(status);
-CREATE INDEX idx_jobs_customer ON jobs(customer_id);
-CREATE INDEX idx_bikes_customer ON bikes(customer_id);
-CREATE INDEX idx_payments_job ON payments(job_id);
-CREATE INDEX idx_payments_status ON payments(status);
+-- Quotes table
+CREATE TABLE IF NOT EXISTS quotes (
+    id VARCHAR(50) PRIMARY KEY,
+    quote_no VARCHAR(50),
+    customer_id VARCHAR(50),
+    valid_until DATE,
+    status VARCHAR(20) DEFAULT 'draft',
+    items JSON,
+    notes TEXT,
+    total DECIMAL(10, 2) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 3. Verify
+SHOW TABLES;

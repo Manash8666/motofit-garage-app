@@ -33,7 +33,7 @@ const STATUS_COLORS = {
     converted: { bg: 'bg-purple-500/20', text: 'text-purple-400', label: 'Converted' },
 };
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const QuoteManagement = () => {
     const [quotes, setQuotes] = useState([]);

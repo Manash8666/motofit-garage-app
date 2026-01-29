@@ -105,6 +105,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             return await handleGetPaymentSummary(res);
         }
 
+        // Quotes routes
+        if (path === '/api/quotes') {
+            if (method === 'GET') return await handleGetQuotes(res);
+            if (method === 'POST') return await handleCreateQuote(req, res);
+        }
+        if (path.startsWith('/api/quotes/') && path.split('/').length === 4) {
+            const id = path.split('/')[3];
+            if (method === 'PUT') return await handleUpdateQuote(req, res, id);
+            if (method === 'DELETE') return await handleDeleteQuote(res, id);
+        }
+        if (path.startsWith('/api/quotes/') && path.endsWith('/convert') && method === 'POST') {
+            const id = path.split('/')[3];
+            return await handleConvertQuote(req, res, id);
+        }
+
         // 404 for unknown routes
         return res.status(404).json({ error: 'Not Found', path });
 
@@ -373,4 +388,96 @@ async function handleGetPaymentSummary(res: VercelResponse) {
     `) as any[];
 
     return res.json(summary?.[0] || { total_count: 0, total_amount: 0, collected: 0, pending: 0 });
+}
+
+// ===================== QUOTES HANDLERS =====================
+async function handleGetQuotes(res: VercelResponse) {
+    const db = getDb();
+    const quotes = await db.execute(`
+        SELECT q.*, c.name as customer_name, c.phone as customer_phone 
+        FROM quotes q 
+        LEFT JOIN customers c ON q.customer_id = c.id 
+        ORDER BY q.created_at DESC LIMIT 100
+    `) as any[];
+    return res.json(quotes || []);
+}
+
+async function handleCreateQuote(req: VercelRequest, res: VercelResponse) {
+    const db = getDb();
+    const data = req.body || {};
+    const id = `qt-${Date.now()}`;
+    const quoteNo = `QT-${Date.now().toString().slice(-6)}`;
+
+    await db.execute(
+        `INSERT INTO quotes (id, quote_no, customer_id, valid_until, status, items, notes, total, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        [id, quoteNo, data.customer_id || null, data.valid_until || null, data.status || 'draft',
+            JSON.stringify(data.items || []), data.notes || '', calculateTotal(data.items)]
+    );
+
+    return res.status(201).json({ id, quote_no: quoteNo, ...data });
+}
+
+async function handleUpdateQuote(req: VercelRequest, res: VercelResponse, id: string) {
+    const db = getDb();
+    const data = req.body || {};
+
+    await db.execute(
+        `UPDATE quotes SET customer_id = ?, valid_until = ?, status = ?, items = ?, notes = ?, total = ?, updated_at = NOW() WHERE id = ?`,
+        [data.customer_id || null, data.valid_until || null, data.status || 'draft',
+        JSON.stringify(data.items || []), data.notes || '', calculateTotal(data.items), id]
+    );
+
+    return res.json({ id, ...data });
+}
+
+async function handleDeleteQuote(res: VercelResponse, id: string) {
+    const db = getDb();
+    await db.execute('DELETE FROM quotes WHERE id = ?', [id]);
+    return res.json({ success: true });
+}
+
+async function handleConvertQuote(req: VercelRequest, res: VercelResponse, id: string) {
+    const db = getDb();
+
+    // Get the quote
+    const quotes = await db.execute('SELECT * FROM quotes WHERE id = ?', [id]) as any[];
+    if (!quotes || quotes.length === 0) {
+        return res.status(404).json({ error: 'Quote not found' });
+    }
+    const quote = quotes[0];
+
+    // Create job from quote
+    const jobId = `job-${Date.now()}`;
+    const jobNo = `JC-${Date.now().toString().slice(-6)}`;
+
+    // Parse items if they're a string (handling potential JSON stringification in DB)
+    let items = quote.items;
+    if (typeof items === 'string') {
+        try { items = JSON.parse(items); } catch (e) { items = []; }
+    }
+
+    // Map quote items (description, quantity, unit_price) to job services (name, quantity, amount)
+    const services = Array.isArray(items) ? items.map((item: any) => ({
+        name: item.description || 'Service',
+        quantity: item.quantity || 1,
+        amount: item.unit_price || 0
+    })) : [];
+
+    await db.execute(
+        `INSERT INTO jobs (id, job_no, customer_id, status, priority, services, total_amount, notes, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        [jobId, jobNo, quote.customer_id, 'pending', 'normal',
+            JSON.stringify(services), quote.total, `Converted from Quote ${quote.quote_no}`]
+    );
+
+    // Update quote status
+    await db.execute('UPDATE quotes SET status = ? WHERE id = ?', ['converted', id]);
+
+    return res.json({ success: true, jobId, jobNo });
+}
+
+function calculateTotal(items: any[]) {
+    if (!Array.isArray(items)) return 0;
+    return items.reduce((sum, item) => sum + ((Number(item.quantity) || 0) * (Number(item.unit_price) || 0)), 0);
 }
