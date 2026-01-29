@@ -41,6 +41,7 @@
     "@types/parse": "^3.0.9",
     "@types/pdf-parse": "^1.1.4",
     "@types/uuid": "^10.0.0",
+    "@vercel/node": "^5.5.28",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   }
