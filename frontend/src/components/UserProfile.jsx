@@ -29,45 +29,58 @@ import {
     Hammer
 } from 'lucide-react';
 
-// Mock Team Data
-const initialTeam = [
-    { id: 1, name: 'Commander Singh', role: 'admin', email: 'commander@motofit.in', status: 'active', avatar: 'CS' },
-    { id: 2, name: 'Vikram Malhotra', role: 'mechanic', email: 'vikram@motofit.in', status: 'active', avatar: 'VM' },
-    { id: 3, name: 'Suresh Raina', role: 'mechanic', email: 'suresh@motofit.in', status: 'away', avatar: 'SR' },
-    { id: 4, name: 'Aditya Roy', role: 'manager', email: 'aditya@motofit.in', status: 'offline', avatar: 'AR' },
-];
+// Get logged-in user from localStorage
+const getLoggedInUser = () => {
+    try {
+        const storedUser = localStorage.getItem('motofit_user');
+        if (storedUser) {
+            const user = JSON.parse(storedUser);
+            return {
+                id: user.id || 1,
+                name: user.name || user.username || 'User',
+                username: user.username || 'user',
+                email: user.email || '',
+                phone: user.phone || '',
+                role: user.role || 'Staff',
+                avatar: user.avatar || (user.username ? user.username.substring(0, 2).toUpperCase() : 'U'),
+                joinDate: user.joinDate || new Date().toISOString().split('T')[0],
+                lastLogin: user.lastLogin || new Date().toISOString(),
+            };
+        }
+    } catch (e) {
+        console.error('Error reading user from localStorage:', e);
+    }
+    // Fallback
+    return {
+        id: 1,
+        name: 'User',
+        username: 'user',
+        email: '',
+        phone: '',
+        role: 'Staff',
+        avatar: 'U',
+        joinDate: new Date().toISOString().split('T')[0],
+        lastLogin: new Date().toISOString(),
+    };
+};
+
+// Team data (starts empty - will be populated from API in future)
+const initialTeam = [];
 
 const ROLES = ['admin', 'manager', 'mechanic'];
 
-// Mock user data
-const mockUser = {
-    id: 1,
-    name: 'Commander Singh',
-    username: 'commander',
-    email: 'commander@motofit.in',
-    phone: '+91 98765 43210',
-    role: 'commander',
-    avatar: 'CS',
-    joinDate: '2024-01-15',
-    lastLogin: '2026-01-16T09:00:00',
+// Organization default data (to be fetched from API in future)
+const defaultOrg = {
+    name: 'MotoFit Garage',
+    address: '',
+    phone: '',
+    gstin: '',
+    website: ''
 };
-
-// Mock active sessions
-const mockSessions = [
-    { id: 1, device: 'Chrome on Windows', ip: '192.168.1.100', loginTime: '2026-01-16 09:00', current: true },
-    { id: 2, device: 'Safari on iPhone', ip: '192.168.1.101', loginTime: '2026-01-15 18:30', current: false },
-    { id: 3, device: 'Firefox on MacOS', ip: '192.168.1.102', loginTime: '2026-01-14 14:20', current: false },
-];
 
 // Organization Tab Component
 const OrganizationTab = () => {
-    const [orgData, setOrgData] = useState({
-        name: 'MotoFit Garage HQ',
-        address: 'Sector 42, Cyber Hub, Gurugram, India',
-        phone: '+91 12345 67890',
-        gstin: '07AABCU9603R1Z2',
-        website: 'www.motofit.in'
-    });
+    const [orgData, setOrgData] = useState(defaultOrg);
     const [logo, setLogo] = useState(null);
 
     const handleLogoUpload = (e) => {
@@ -403,6 +416,11 @@ const SecurityTab = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
 
+    // Current session info
+    const [sessions] = useState([
+        { id: 1, device: 'Current Browser', ip: 'Your IP', loginTime: new Date().toLocaleString(), current: true }
+    ]);
+
     const handleChangePassword = async () => {
         setError('');
 
@@ -504,7 +522,7 @@ const SecurityTab = () => {
                     Active Sessions
                 </h3>
                 <div className="space-y-3">
-                    {mockSessions.map((session) => (
+                    {sessions.map((session) => (
                         <div
                             key={session.id}
                             className={`flex items-center justify-between p-4 rounded-xl border ${session.current
@@ -582,8 +600,8 @@ const WorkshopTab = () => {
                                 onClick={() => deleteBay(bay.id)}
                                 disabled={bay.status === 'occupied'}
                                 className={`p-2 rounded-lg transition-colors ${bay.status === 'occupied'
-                                        ? 'text-gray-600 cursor-not-allowed'
-                                        : 'text-gray-500 hover:text-red-400 hover:bg-red-500/10'
+                                    ? 'text-gray-600 cursor-not-allowed'
+                                    : 'text-gray-500 hover:text-red-400 hover:bg-red-500/10'
                                     }`}
                                 title={bay.status === 'occupied' ? "Cannot delete occupied bay" : "Delete Bay"}
                             >
@@ -671,7 +689,7 @@ const UserProfile = ({ onLogout }) => {
                 animate={{ opacity: 1, y: 0 }}
             >
                 {activeTab === 'profile' && (
-                    <ProfileTab user={mockUser} onSave={(data) => console.log('Saved:', data)} />
+                    <ProfileTab user={getLoggedInUser()} onSave={(data) => console.log('Saved:', data)} />
                 )}
                 {activeTab === 'organization' && <OrganizationTab />}
                 {activeTab === 'team' && <TeamTab />}
