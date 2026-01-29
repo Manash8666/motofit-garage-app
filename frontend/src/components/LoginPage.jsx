@@ -123,15 +123,7 @@ const LoginForm = ({ onLogin, onForgotPassword, loading, error }) => {
                 )}
             </motion.button>
 
-            {/* Demo Credentials */}
-            <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-                <p className="text-xs text-gray-500 mb-2">Demo Credentials:</p>
-                <div className="space-y-1 text-xs font-mono text-gray-400">
-                    <p>Commander: <span className="text-orange-400">commander / admin123</span></p>
-                    <p>Manager: <span className="text-orange-400">manager / manager123</span></p>
-                    <p>Mechanic: <span className="text-orange-400">mechanic / mech123</span></p>
-                </div>
-            </div>
+
         </form>
     );
 };
