@@ -166,7 +166,7 @@ export const NotificationBell = ({ onClick, unreadCount = 0 }) => {
 };
 
 // Main Notification Center Component
-const NotificationCenter = ({ isOpen, onClose }) => {
+const NotificationCenter = ({ isOpen, onClose, pushPermission, pushSupported, onRequestPush, onTestPush }) => {
     const [notifications, setNotifications] = useState(SAMPLE_NOTIFICATIONS);
     const [filter, setFilter] = useState('all');
 
@@ -242,8 +242,8 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                                     <button
                                         key={f}
                                         className={`px-3 py-1.5 text-xs font-medium rounded-lg whitespace-nowrap transition-colors ${filter === f
-                                                ? 'bg-orange-500/20 text-orange-400'
-                                                : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                            ? 'bg-orange-500/20 text-orange-400'
+                                            : 'text-gray-400 hover:text-white hover:bg-white/5'
                                             }`}
                                         onClick={() => setFilter(f)}
                                     >
@@ -252,6 +252,40 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                                 ))}
                             </div>
                         </div>
+
+                        {/* Push Notification Settings */}
+                        {pushSupported && (
+                            <div className="px-4 py-3 border-b border-white/5 bg-white/[0.02]">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Bell className="w-4 h-4 text-gray-400" />
+                                        <span className="text-sm text-gray-300">Browser Notifications</span>
+                                    </div>
+                                    {pushPermission === 'granted' ? (
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs text-emerald-400 flex items-center gap-1">
+                                                <CheckCircle className="w-3 h-3" /> Enabled
+                                            </span>
+                                            <button
+                                                className="px-2 py-1 text-xs bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500/30 transition-colors"
+                                                onClick={onTestPush}
+                                            >
+                                                Test
+                                            </button>
+                                        </div>
+                                    ) : pushPermission === 'denied' ? (
+                                        <span className="text-xs text-red-400">Blocked</span>
+                                    ) : (
+                                        <button
+                                            className="px-3 py-1 text-xs bg-orange-500/20 text-orange-400 rounded hover:bg-orange-500/30 transition-colors"
+                                            onClick={onRequestPush}
+                                        >
+                                            Enable
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Actions Bar */}
                         <div className="px-4 py-2 border-b border-white/5 flex justify-between">

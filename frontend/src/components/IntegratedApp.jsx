@@ -62,6 +62,7 @@ import { SyncStatusIndicator } from './SyncStatusIndicator';
 import { OfflineTestDemo } from './OfflineTestDemo';
 import useSessionTimeout from '../hooks/useSessionTimeout';
 import { logLogin, logLogout } from '../utils/auditLogger';
+import { usePushNotifications } from '../hooks/usePushNotifications';
 
 // Navigation items with paths
 const NAV_ITEMS = [
@@ -224,6 +225,20 @@ const IntegratedApp = () => {
     const [notificationsOpen, setNotificationsOpen] = useState(false);
     const [showTimeoutWarning, setShowTimeoutWarning] = useState(false);
     const [timeoutSeconds, setTimeoutSeconds] = useState(60);
+
+    // Push Notifications
+    const { permission, isSupported, requestPermission, sendTestNotification } = usePushNotifications();
+
+    // Auto-request notification permission when authenticated
+    useEffect(() => {
+        if (isAuthenticated && isSupported && permission === 'default') {
+            // Small delay to not overwhelm user on first load
+            const timer = setTimeout(() => {
+                requestPermission();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [isAuthenticated, isSupported, permission, requestPermission]);
 
     // Proper logout handler - clears all auth data
     const handleLogout = () => {
@@ -410,6 +425,10 @@ const IntegratedApp = () => {
                 <NotificationCenter
                     isOpen={notificationsOpen}
                     onClose={() => setNotificationsOpen(false)}
+                    pushPermission={permission}
+                    pushSupported={isSupported}
+                    onRequestPush={requestPermission}
+                    onTestPush={sendTestNotification}
                 />
 
                 {/* Content */}
