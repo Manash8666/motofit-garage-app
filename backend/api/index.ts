@@ -29,8 +29,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(200).end();
     }
 
-    const path = req.url || '/';
-    console.log(`[API] ${req.method} ${path}`);
+    const path = req.url?.split('?')[0] || '/';
+    const method = req.method || 'GET';
+    console.log(`[API] ${method} ${path}`);
 
     try {
         // Health check
@@ -42,26 +43,66 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             });
         }
 
-        // Login endpoint
-        if (path === '/api/auth/login' && req.method === 'POST') {
+        // Auth routes
+        if (path === '/api/auth/login' && method === 'POST') {
             return await handleLogin(req, res);
         }
-
-        // Get current user
-        if (path === '/api/auth/me' && req.method === 'GET') {
+        if (path === '/api/auth/me' && method === 'GET') {
             return await handleGetMe(req, res);
         }
 
-        // Echo/debug endpoint
-        if (path.startsWith('/api/echo')) {
-            return res.json({
-                method: req.method,
-                url: path,
-                envCheck: {
-                    TIDB_HOST: process.env.TIDB_HOST ? 'SET' : 'NOT SET',
-                    TIDB_USER: process.env.TIDB_USER ? 'SET' : 'NOT SET'
-                }
-            });
+        // Jobs routes
+        if (path === '/api/jobs') {
+            if (method === 'GET') return await handleGetJobs(res);
+            if (method === 'POST') return await handleCreateJob(req, res);
+        }
+        if (path.startsWith('/api/jobs/') && path.split('/').length === 4) {
+            const id = path.split('/')[3];
+            if (method === 'GET') return await handleGetJob(res, id);
+            if (method === 'PUT') return await handleUpdateJob(req, res, id);
+            if (method === 'DELETE') return await handleDeleteJob(res, id);
+        }
+
+        // Customers routes
+        if (path === '/api/customers') {
+            if (method === 'GET') return await handleGetCustomers(res);
+            if (method === 'POST') return await handleCreateCustomer(req, res);
+        }
+        if (path.startsWith('/api/customers/') && path.split('/').length === 4) {
+            const id = path.split('/')[3];
+            if (method === 'PUT') return await handleUpdateCustomer(req, res, id);
+            if (method === 'DELETE') return await handleDeleteCustomer(res, id);
+        }
+
+        // Services routes
+        if (path === '/api/services') {
+            if (method === 'GET') return await handleGetServices(res);
+            if (method === 'POST') return await handleCreateService(req, res);
+        }
+        if (path.startsWith('/api/services/') && path.split('/').length === 4) {
+            const id = path.split('/')[3];
+            if (method === 'PUT') return await handleUpdateService(req, res, id);
+            if (method === 'DELETE') return await handleDeleteService(res, id);
+        }
+
+        // Bikes routes
+        if (path === '/api/bikes') {
+            if (method === 'GET') return await handleGetBikes(res);
+            if (method === 'POST') return await handleCreateBike(req, res);
+        }
+        if (path.startsWith('/api/bikes/') && path.split('/').length === 4) {
+            const id = path.split('/')[3];
+            if (method === 'PUT') return await handleUpdateBike(req, res, id);
+            if (method === 'DELETE') return await handleDeleteBike(res, id);
+        }
+
+        // Payments routes
+        if (path === '/api/payments') {
+            if (method === 'GET') return await handleGetPayments(res);
+            if (method === 'POST') return await handleCreatePayment(req, res);
+        }
+        if (path === '/api/payments/summary' && method === 'GET') {
+            return await handleGetPaymentSummary(res);
         }
 
         // 404 for unknown routes
@@ -73,7 +114,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 }
 
-// Login handler
+// ===================== AUTH HANDLERS =====================
 async function handleLogin(req: VercelRequest, res: VercelResponse) {
     const { username, password } = req.body || {};
 
@@ -82,8 +123,6 @@ async function handleLogin(req: VercelRequest, res: VercelResponse) {
     }
 
     const db = getDb();
-
-    // Query user
     const users = await db.execute(
         'SELECT id, username, password_hash, role, email FROM users WHERE username = ?',
         [username]
@@ -94,8 +133,6 @@ async function handleLogin(req: VercelRequest, res: VercelResponse) {
     }
 
     const user = users[0];
-
-    // Verify password
     if (!user.password_hash) {
         return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -105,7 +142,6 @@ async function handleLogin(req: VercelRequest, res: VercelResponse) {
         return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Return user data (using username as token for simplicity)
     return res.json({
         user: {
             id: user.id,
@@ -117,16 +153,14 @@ async function handleLogin(req: VercelRequest, res: VercelResponse) {
     });
 }
 
-// Get current user handler
 async function handleGetMe(req: VercelRequest, res: VercelResponse) {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ error: 'Not authenticated' });
     }
 
-    const username = authHeader.substring(7); // Remove "Bearer "
+    const username = authHeader.substring(7);
     const db = getDb();
-
     const users = await db.execute(
         'SELECT id, username, role, email FROM users WHERE username = ?',
         [username]
@@ -137,4 +171,206 @@ async function handleGetMe(req: VercelRequest, res: VercelResponse) {
     }
 
     return res.json({ user: users[0] });
+}
+
+// ===================== JOBS HANDLERS =====================
+async function handleGetJobs(res: VercelResponse) {
+    const db = getDb();
+    const jobs = await db.execute('SELECT * FROM jobs ORDER BY created_at DESC LIMIT 100') as any[];
+    return res.json(jobs || []);
+}
+
+async function handleGetJob(res: VercelResponse, id: string) {
+    const db = getDb();
+    const jobs = await db.execute('SELECT * FROM jobs WHERE id = ?', [id]) as any[];
+    if (!jobs || jobs.length === 0) {
+        return res.status(404).json({ error: 'Job not found' });
+    }
+    return res.json(jobs[0]);
+}
+
+async function handleCreateJob(req: VercelRequest, res: VercelResponse) {
+    const db = getDb();
+    const data = req.body || {};
+    const id = `job-${Date.now()}`;
+    const jobNo = `JC-${Date.now().toString().slice(-6)}`;
+
+    await db.execute(
+        `INSERT INTO jobs (id, job_no, customer_id, vehicle_id, status, priority, services, total_amount, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        [id, jobNo, data.customer_id || null, data.vehicle_id || null, data.status || 'pending',
+            data.priority || 'normal', JSON.stringify(data.services || []), data.total_amount || 0]
+    );
+
+    return res.status(201).json({ id, job_no: jobNo, ...data });
+}
+
+async function handleUpdateJob(req: VercelRequest, res: VercelResponse, id: string) {
+    const db = getDb();
+    const data = req.body || {};
+
+    await db.execute(
+        `UPDATE jobs SET status = ?, priority = ?, services = ?, total_amount = ?, updated_at = NOW() WHERE id = ?`,
+        [data.status || 'pending', data.priority || 'normal', JSON.stringify(data.services || []), data.total_amount || 0, id]
+    );
+
+    return res.json({ id, ...data });
+}
+
+async function handleDeleteJob(res: VercelResponse, id: string) {
+    const db = getDb();
+    await db.execute('DELETE FROM jobs WHERE id = ?', [id]);
+    return res.json({ success: true });
+}
+
+// ===================== CUSTOMERS HANDLERS =====================
+async function handleGetCustomers(res: VercelResponse) {
+    const db = getDb();
+    const customers = await db.execute('SELECT * FROM customers ORDER BY created_at DESC LIMIT 100') as any[];
+    return res.json(customers || []);
+}
+
+async function handleCreateCustomer(req: VercelRequest, res: VercelResponse) {
+    const db = getDb();
+    const data = req.body || {};
+    const id = `cust-${Date.now()}`;
+
+    await db.execute(
+        `INSERT INTO customers (id, name, phone, email, address, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, NOW(), NOW())`,
+        [id, data.name || '', data.phone || '', data.email || '', data.address || '']
+    );
+
+    return res.status(201).json({ id, ...data });
+}
+
+async function handleUpdateCustomer(req: VercelRequest, res: VercelResponse, id: string) {
+    const db = getDb();
+    const data = req.body || {};
+
+    await db.execute(
+        `UPDATE customers SET name = ?, phone = ?, email = ?, address = ?, updated_at = NOW() WHERE id = ?`,
+        [data.name || '', data.phone || '', data.email || '', data.address || '', id]
+    );
+
+    return res.json({ id, ...data });
+}
+
+async function handleDeleteCustomer(res: VercelResponse, id: string) {
+    const db = getDb();
+    await db.execute('DELETE FROM customers WHERE id = ?', [id]);
+    return res.json({ success: true });
+}
+
+// ===================== SERVICES HANDLERS =====================
+async function handleGetServices(res: VercelResponse) {
+    const db = getDb();
+    const services = await db.execute('SELECT * FROM services ORDER BY name ASC') as any[];
+    return res.json(services || []);
+}
+
+async function handleCreateService(req: VercelRequest, res: VercelResponse) {
+    const db = getDb();
+    const data = req.body || {};
+    const id = `svc-${Date.now()}`;
+
+    await db.execute(
+        `INSERT INTO services (id, name, description, price, duration, category, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+        [id, data.name || '', data.description || '', data.price || 0, data.duration || 60, data.category || 'General']
+    );
+
+    return res.status(201).json({ id, ...data });
+}
+
+async function handleUpdateService(req: VercelRequest, res: VercelResponse, id: string) {
+    const db = getDb();
+    const data = req.body || {};
+
+    await db.execute(
+        `UPDATE services SET name = ?, description = ?, price = ?, duration = ?, category = ? WHERE id = ?`,
+        [data.name || '', data.description || '', data.price || 0, data.duration || 60, data.category || 'General', id]
+    );
+
+    return res.json({ id, ...data });
+}
+
+async function handleDeleteService(res: VercelResponse, id: string) {
+    const db = getDb();
+    await db.execute('DELETE FROM services WHERE id = ?', [id]);
+    return res.json({ success: true });
+}
+
+// ===================== BIKES HANDLERS =====================
+async function handleGetBikes(res: VercelResponse) {
+    const db = getDb();
+    const bikes = await db.execute('SELECT * FROM bikes ORDER BY created_at DESC LIMIT 100') as any[];
+    return res.json(bikes || []);
+}
+
+async function handleCreateBike(req: VercelRequest, res: VercelResponse) {
+    const db = getDb();
+    const data = req.body || {};
+    const id = `bike-${Date.now()}`;
+
+    await db.execute(
+        `INSERT INTO bikes (id, customer_id, make, model, year, registration_no, color, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
+        [id, data.customer_id || null, data.make || '', data.model || '', data.year || null, data.registration_no || '', data.color || '']
+    );
+
+    return res.status(201).json({ id, ...data });
+}
+
+async function handleUpdateBike(req: VercelRequest, res: VercelResponse, id: string) {
+    const db = getDb();
+    const data = req.body || {};
+
+    await db.execute(
+        `UPDATE bikes SET make = ?, model = ?, year = ?, registration_no = ?, color = ? WHERE id = ?`,
+        [data.make || '', data.model || '', data.year || null, data.registration_no || '', data.color || '', id]
+    );
+
+    return res.json({ id, ...data });
+}
+
+async function handleDeleteBike(res: VercelResponse, id: string) {
+    const db = getDb();
+    await db.execute('DELETE FROM bikes WHERE id = ?', [id]);
+    return res.json({ success: true });
+}
+
+// ===================== PAYMENTS HANDLERS =====================
+async function handleGetPayments(res: VercelResponse) {
+    const db = getDb();
+    const payments = await db.execute('SELECT * FROM payments ORDER BY created_at DESC LIMIT 100') as any[];
+    return res.json(payments || []);
+}
+
+async function handleCreatePayment(req: VercelRequest, res: VercelResponse) {
+    const db = getDb();
+    const data = req.body || {};
+    const id = `pay-${Date.now()}`;
+
+    await db.execute(
+        `INSERT INTO payments (id, job_id, customer_id, amount, method, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+        [id, data.job_id || null, data.customer_id || null, data.amount || 0, data.method || 'cash', data.status || 'completed']
+    );
+
+    return res.status(201).json({ id, ...data });
+}
+
+async function handleGetPaymentSummary(res: VercelResponse) {
+    const db = getDb();
+    const summary = await db.execute(`
+        SELECT 
+            COUNT(*) as total_count,
+            COALESCE(SUM(amount), 0) as total_amount,
+            COALESCE(SUM(CASE WHEN status = 'completed' THEN amount ELSE 0 END), 0) as collected,
+            COALESCE(SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END), 0) as pending
+        FROM payments
+    `) as any[];
+
+    return res.json(summary?.[0] || { total_count: 0, total_amount: 0, collected: 0, pending: 0 });
 }
