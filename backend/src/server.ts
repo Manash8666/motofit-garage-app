@@ -117,6 +117,8 @@ app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📦 Parse Server running at ${parseConfig.serverURL}`);
     console.log(`💾 Database: ${parseConfig.databaseURI}`);
+    console.log(`🔑 AppID: ${parseConfig.appId}`);
+    console.log(`🔑 MasterKey: ${parseConfig.masterKey}`);
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
 
     // Start Background Services

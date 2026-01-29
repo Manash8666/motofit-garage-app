@@ -1,17 +1,8 @@
 import { Router, Request, Response } from 'express';
-import Parse from 'parse/node';
 import { z } from 'zod';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-// Initialize Parse SDK for server-side operations
-Parse.initialize(
-    process.env.PARSE_APP_ID || 'motofit-app',
-    '', // JavaScript Key (not needed for server)
-    process.env.PARSE_MASTER_KEY || 'motofit-master-key'
-);
-Parse.serverURL = process.env.PARSE_SERVER_URL || 'http://localhost:5000/api/parse';
+import bcrypt from 'bcryptjs';
+import { queryOne, query } from '../db/tidb';
+import crypto from 'crypto';
 
 const router = Router();
 
@@ -26,19 +17,39 @@ router.post('/login', async (req: Request, res: Response) => {
     try {
         const { username, password } = loginSchema.parse(req.body);
 
-        // Use Parse User login
-        const user = await Parse.User.logIn(username, password);
+        // 1. Get user from TiDB
+        const user = await queryOne(
+            'SELECT id, username, password_hash, role, email, allowed_ips FROM users WHERE username = ?',
+            [username]
+        );
 
-        // Get session token
-        const sessionToken = user.getSessionToken();
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        // 2. Verify Password
+        if (user.password_hash) {
+            const isValid = await bcrypt.compare(password, user.password_hash);
+            if (!isValid) {
+                return res.status(401).json({ error: 'Invalid credentials' });
+            }
+        } else {
+            // Legacy/Fallback for unhashed (should not happen in prod due to migration, but for safety)
+            return res.status(401).json({ error: 'Invalid credentials (legacy)' });
+        }
+
+        // 3. Generate Token
+        // NOTE: As per auth.middleware.ts, we are using "token = username" for this demo.
+        // In a real JWT setup, we would sign a token here.
+        const sessionToken = user.username;
 
         // Return user data
         res.json({
             user: {
                 id: user.id,
-                username: user.get('username'),
-                email: user.get('email') || '',
-                role: user.get('role') || 'Staff'
+                username: user.username,
+                email: user.email || '',
+                role: user.role || 'Staff'
             },
             token: sessionToken
         });
@@ -46,12 +57,6 @@ router.post('/login', async (req: Request, res: Response) => {
         if (error instanceof z.ZodError) {
             return res.status(400).json({ error: 'Invalid request data', details: error.errors });
         }
-
-        // Parse error handling
-        if (error.code === Parse.Error.OBJECT_NOT_FOUND) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
         console.error('Login error:', error);
         res.status(500).json({ error: 'Login failed' });
     }
@@ -62,26 +67,27 @@ router.post('/register', async (req: Request, res: Response) => {
     try {
         const { username, password, role, email } = req.body;
 
-        // Create new Parse User
-        const user = new Parse.User();
-        user.set('username', username);
-        user.set('password', password);
-        user.set('email', email || '');
-        user.set('role', role || 'Staff');
-
-        await user.signUp();
-
-        res.status(201).json({
-            id: user.id,
-            username: user.get('username'),
-            role: user.get('role'),
-            email: user.get('email')
-        });
-    } catch (error: any) {
-        if (error.code === Parse.Error.USERNAME_TAKEN) {
+        // Check if username exists
+        const existing = await queryOne('SELECT id FROM users WHERE username = ?', [username]);
+        if (existing) {
             return res.status(400).json({ error: 'Username already exists' });
         }
 
+        const id = crypto.randomUUID();
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await query(
+            'INSERT INTO users (id, username, password_hash, role, email) VALUES (?, ?, ?, ?, ?)',
+            [id, username, hashedPassword, role || 'Staff', email || '']
+        );
+
+        res.status(201).json({
+            id,
+            username,
+            role: role || 'Staff',
+            email
+        });
+    } catch (error: any) {
         console.error('Register error:', error);
         res.status(500).json({ error: 'Registration failed' });
     }
@@ -95,25 +101,28 @@ router.get('/me', async (req: Request, res: Response) => {
             return res.status(401).json({ error: 'Not authenticated' });
         }
 
-        // Extract session token from Bearer token
-        const sessionToken = authHeader.startsWith('Bearer ')
+        // Extract token
+        const token = authHeader.startsWith('Bearer ')
             ? authHeader.substring(7)
             : authHeader;
 
-        // Become user with session token
-        const user = await Parse.User.become(sessionToken);
+        // In our simple auth, token = username
+        const user = await queryOne(
+            'SELECT id, username, email, role FROM users WHERE username = ?',
+            [token]
+        );
 
-        res.json({
-            id: user.id,
-            username: user.get('username'),
-            email: user.get('email') || '',
-            role: user.get('role') || 'Staff'
-        });
-    } catch (error: any) {
-        if (error.code === Parse.Error.INVALID_SESSION_TOKEN) {
+        if (!user) {
             return res.status(401).json({ error: 'Invalid token' });
         }
 
+        res.json({
+            id: user.id,
+            username: user.username,
+            email: user.email || '',
+            role: user.role || 'Staff'
+        });
+    } catch (error: any) {
         console.error('Get user error:', error);
         res.status(500).json({ error: 'Failed to get user' });
     }

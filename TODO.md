@@ -189,3 +189,5 @@ frontend/src/
 
 *Auto-Update:* Enabled 🤖  
 *Last Security Audit:* 2026-01-28
+Enable Lead Sync: Since we disabled the built-in Vercel Cron (due to limits), go to cron-job.org and point it to: https://YOUR-BACKEND.vercel.app/api/cron/lead-sync (Every 10 mins).
+Enjoy! Open your Frontend Vercel URL on any device (phone, tablet, laptop) and log in! 🏍️
