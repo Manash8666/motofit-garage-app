@@ -215,24 +215,26 @@ const LoginPage = ({ onLoginSuccess }) => {
         setError('');
 
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 800));
+            // Call real backend API
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const response = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
 
-            const users = {
-                commander: { password: 'admin123', name: 'Commander Singh', role: 'commander' },
-                manager: { password: 'manager123', name: 'Priya Sharma', role: 'manager' },
-                mechanic: { password: 'mech123', name: 'Vikram Singh', role: 'mechanic' },
-            };
+            const data = await response.json();
 
-            if (!users[username] || users[username].password !== password) {
-                throw new Error('Invalid username or password');
+            if (!response.ok) {
+                throw new Error(data.error || 'Login failed');
             }
 
-            const user = { username, ...users[username] };
-            localStorage.setItem('motofit_user', JSON.stringify(user));
+            // Store token and user data
+            localStorage.setItem('auth_token', data.token);
+            localStorage.setItem('motofit_user', JSON.stringify(data.user));
 
             if (onLoginSuccess) {
-                onLoginSuccess(user);
+                onLoginSuccess(data.user);
             }
         } catch (err) {
             setError(err.message);
