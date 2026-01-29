@@ -342,6 +342,7 @@ export const useHybridStore = create(
             }),
             {
                 name: 'motofit-hybrid-storage',
+                version: 2, // Increment to clear old demo data from localStorage
                 partialize: (state) => ({
                     activeMissions: state.activeMissions,
                     customers: state.customers,

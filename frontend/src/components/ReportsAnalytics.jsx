@@ -41,83 +41,16 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 
-// Sample data (would come from API in production)
-const revenueData = [
-    { month: 'Jan', revenue: 125000, expenses: 45000, profit: 80000 },
-    { month: 'Feb', revenue: 148000, expenses: 52000, profit: 96000 },
-    { month: 'Mar', revenue: 156000, expenses: 48000, profit: 108000 },
-    { month: 'Apr', revenue: 189000, expenses: 55000, profit: 134000 },
-    { month: 'May', revenue: 178000, expenses: 51000, profit: 127000 },
-
-    { month: 'Jun', revenue: 210000, expenses: 62000, profit: 148000 },
-    // Forecast data
-    { month: 'Jul (Est)', revenue: 225000, expenses: 65000, profit: 160000, isForecast: true },
-];
-
-const serviceDistribution = [
-    { name: 'Basic Service', value: 35, color: '#FF6B35' },
-    { name: 'Full Service', value: 25, color: '#06D6A0' },
-    { name: 'Engine Repair', value: 20, color: '#FFD166' },
-    { name: 'Electrical', value: 12, color: '#1E3A5F' },
-    { name: 'Other', value: 8, color: '#9CA3AF' },
-];
-
-const mechanicPerformance = [
-    { name: 'Vikram', jobs: 45, efficiency: 95, rating: 4.8 },
-    { name: 'Suresh', jobs: 38, efficiency: 88, rating: 4.5 },
-    { name: 'Anil', jobs: 42, efficiency: 92, rating: 4.7 },
-    { name: 'Rajesh', jobs: 35, efficiency: 85, rating: 4.3 },
-];
-
-const dailyJobs = [
-    { day: 'Mon', completed: 12, pending: 3 },
-    { day: 'Tue', completed: 15, pending: 2 },
-    { day: 'Wed', completed: 10, pending: 5 },
-    { day: 'Thu', completed: 18, pending: 1 },
-    { day: 'Fri', completed: 14, pending: 4 },
-    { day: 'Sat', completed: 20, pending: 2 },
-    { day: 'Sun', completed: 8, pending: 1 },
-];
-
-const topServices = [
-    { name: 'Oil Change', count: 156, revenue: 124800 },
-    { name: 'Full Service', count: 89, revenue: 267000 },
-    { name: 'Brake Service', count: 67, revenue: 167500 },
-    { name: 'Chain Replacement', count: 54, revenue: 54000 },
-    { name: 'Engine Tune-up', count: 45, revenue: 135000 },
-];
-
-const inventoryStats = [
-    { name: 'In Stock', value: 850, color: '#06D6A0' },
-    { name: 'Low Stock', value: 45, color: '#FFD166' },
-    { name: 'Out of Stock', value: 12, color: '#EF476F' },
-];
-
-const customerGrowth = [
-    { month: 'Jan', new: 45, returning: 120 },
-    { month: 'Feb', new: 52, returning: 135 },
-    { month: 'Mar', new: 48, returning: 142 },
-    { month: 'Apr', new: 65, returning: 155 },
-    { month: 'May', new: 58, returning: 168 },
-    { month: 'Jun', new: 75, returning: 180 },
-    { month: 'Jun', new: 75, returning: 180 },
-];
-
-const customerValueData = [
-    { segment: 'VIP', count: 120, value: 85000, avg: 708 },
-    { segment: 'Regular', count: 450, value: 125000, avg: 277 },
-    { segment: 'Occasional', count: 800, value: 95000, avg: 118 },
-    { segment: 'New', count: 200, value: 15000, avg: 75 },
-];
-
-const turnoverData = [
-    { month: 'Jan', ratio: 4.2 },
-    { month: 'Feb', ratio: 4.5 },
-    { month: 'Mar', ratio: 5.1 },
-    { month: 'Apr', ratio: 4.8 },
-    { month: 'May', ratio: 5.4 },
-    { month: 'Jun', ratio: 5.8 },
-];
+// Data arrays - empty (will be populated from backend API)
+const revenueData = [];
+const serviceDistribution = [];
+const mechanicPerformance = [];
+const dailyJobs = [];
+const topServices = [];
+const inventoryStats = [];
+const customerGrowth = [];
+const customerValueData = [];
+const turnoverData = [];
 
 // Stat Card Component
 const StatCard = ({ title, value, change, trend, icon: Icon, color = 'orange' }) => (

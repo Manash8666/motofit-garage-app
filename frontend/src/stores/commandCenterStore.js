@@ -253,7 +253,7 @@ export const useCommandCenterStore = create(
             }),
             {
                 name: 'motofit-command-center',
-                version: 1, // Add versioning
+                version: 2, // Increment to clear old demo data from localStorage
             }
         ),
         { name: 'CommandCenterStore' }
