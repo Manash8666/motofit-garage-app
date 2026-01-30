@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useMissions, useBays, useHybridStore } from '../stores/hybridStore';
 import useCommandCenterStore from '../stores/commandCenterStore'; // Still used for non-mission global state
+import JobCardForm from './JobCardForm';
 
 // Glass Card Component Reuse
 const GlassCard = ({ children, className = '' }) => (
@@ -134,8 +135,15 @@ const RepairOperations = () => {
     const missions = useMissions();
     const bays = useBays();
     const { createMission, updateMission } = useHybridStore();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isJobCardFormOpen, setIsJobCardFormOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const handleJobCardSave = (job) => {
+        console.log('Job card created:', job);
+        setIsJobCardFormOpen(false);
+        // Optionally create a mission from the job card
+        // createMission({ ... });
+    };
 
     const [newMission, setNewMission] = useState({
         missionCode: `JC-${String(Math.floor(Math.random() * 900) + 100)}`,
@@ -204,11 +212,11 @@ const RepairOperations = () => {
                         />
                     </div>
                     <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl font-bold text-white hover:shadow-lg hover:from-cyan-500 hover:to-blue-500 transition-all"
+                        onClick={() => setIsJobCardFormOpen(true)}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 rounded-xl font-bold text-white hover:shadow-lg hover:from-orange-500 hover:to-orange-400 transition-all"
                     >
                         <Plus className="w-5 h-5" />
-                        New Mission
+                        Create Job Card
                     </button>
                 </div>
             </div>
@@ -381,6 +389,13 @@ const RepairOperations = () => {
                     </div>
                 )}
             </AnimatePresence>
+
+            {/* Job Card Creation Form */}
+            <JobCardForm
+                isOpen={isJobCardFormOpen}
+                onClose={() => setIsJobCardFormOpen(false)}
+                onSave={handleJobCardSave}
+            />
         </div>
     );
 };
