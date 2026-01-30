@@ -21,6 +21,7 @@ import {
     Activity,
     Package,
     FileText,
+    X,
 } from 'lucide-react';
 import Papa from 'papaparse';
 import {

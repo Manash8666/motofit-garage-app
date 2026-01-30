@@ -81,8 +81,11 @@ const defaultOrg = {
 
 // Organization Tab Component
 const OrganizationTab = () => {
-    const [orgData, setOrgData] = useState(defaultOrg);
-    const [logo, setLogo] = useState(null);
+    const [orgData, setOrgData] = useState(() => {
+        const saved = localStorage.getItem('motofit_org_data');
+        return saved ? JSON.parse(saved) : defaultOrg;
+    });
+    const [logo, setLogo] = useState(() => localStorage.getItem('motofit_org_logo'));
 
     const handleLogoUpload = (e) => {
         const file = e.target.files[0];
@@ -170,6 +173,21 @@ const OrganizationTab = () => {
                                 onChange={e => setOrgData({ ...orgData, website: e.target.value })}
                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500/50"
                             />
+                        </div>
+                        <div className="md:col-span-2 flex justify-end pt-4">
+                            <button
+                                onClick={() => {
+                                    localStorage.setItem('motofit_org_data', JSON.stringify(orgData));
+                                    if (logo) localStorage.setItem('motofit_org_logo', logo);
+                                    // Dispatch a custom event so other components can update
+                                    window.dispatchEvent(new Event('org-data-updated'));
+                                    alert('✅ Organization details saved successfully!');
+                                }}
+                                className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl text-white font-bold hover:from-orange-400 hover:to-red-500 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2"
+                            >
+                                <Save className="w-5 h-5" />
+                                Save Changes
+                            </button>
                         </div>
                     </div>
                 </div>
