@@ -505,12 +505,13 @@ async function handlePurgeAllData(res: VercelResponse) {
 
     try {
         // Truncate tables in correct order (respecting foreign keys)
+        // NOTE: bikes table is excluded to preserve bike database
         await db.execute('SET FOREIGN_KEY_CHECKS=0');
 
         const tables = [
             'payments', 'quote_items', 'quotes', 'time_entries',
             'job_services', 'job_parts', 'jobs', 'warranty_claims',
-            'service_history', 'bikes', 'customers', 'parts', 'services',
+            'service_history', 'customers', 'parts', 'services',
             'photo_gallery', 'mechanics', 'inventory', 'leads', 'users'
         ];
 
@@ -526,7 +527,7 @@ async function handlePurgeAllData(res: VercelResponse) {
 
         return res.json({
             success: true,
-            message: 'All data purged successfully',
+            message: 'All data purged successfully (bikes preserved)',
             tables_cleared: tables.length
         });
     } catch (error: any) {
