@@ -1,10 +1,10 @@
 # Security & Environment
 .env
 .env.local
-.env.*
+.env.production
+.env.development
+!.env.example
 node_modules/
-dist/
-coverage/
 
 # Logs
 npm-debug.log*
