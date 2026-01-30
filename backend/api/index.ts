@@ -43,6 +43,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             });
         }
 
+        // DEBUG: Check environment variables (REMOVE AFTER DEBUGGING)
+        if (path === '/api/debug/env' && method === 'GET') {
+            return res.json({
+                hasHost: !!process.env.TIDB_HOST,
+                hasUser: !!process.env.TIDB_USER,
+                hasPassword: !!process.env.TIDB_PASSWORD,
+                hasDatabase: !!process.env.TIDB_DATABASE,
+                host: process.env.TIDB_HOST?.substring(0, 10) + '...',
+                user: process.env.TIDB_USER?.substring(0, 5) + '...',
+                database: process.env.TIDB_DATABASE
+            });
+        }
+
         // Auth routes
         if (path === '/api/auth/login' && method === 'POST') {
             return await handleLogin(req, res);
