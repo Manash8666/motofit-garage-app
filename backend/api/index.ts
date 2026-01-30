@@ -134,6 +134,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             return await handleConvertQuote(req, res, id);
         }
 
+        // Admin routes - Data Management
+        if (path === '/api/admin/purge' && method === 'DELETE') {
+            return await handlePurgeAllData(res);
+        }
+        if (path === '/api/admin/seed-demo' && method === 'POST') {
+            return await handleSeedDemoData(res);
+        }
+
         // 404 for unknown routes
         return res.status(404).json({ error: 'Not Found', path });
 
@@ -489,6 +497,122 @@ async function handleConvertQuote(req: VercelRequest, res: VercelResponse, id: s
     await db.execute('UPDATE quotes SET status = ? WHERE id = ?', ['converted', id]);
 
     return res.json({ success: true, jobId, jobNo });
+}
+
+// Admin: Purge all data from database
+async function handlePurgeAllData(res: VercelResponse) {
+    const db = getDb();
+
+    try {
+        // Truncate tables in correct order (respecting foreign keys)
+        await db.execute('SET FOREIGN_KEY_CHECKS=0');
+
+        const tables = [
+            'payments', 'quote_items', 'quotes', 'time_entries',
+            'job_services', 'job_parts', 'jobs', 'warranty_claims',
+            'service_history', 'bikes', 'customers', 'parts', 'services',
+            'photo_gallery', 'mechanics', 'inventory', 'leads', 'users'
+        ];
+
+        for (const table of tables) {
+            try {
+                await db.execute(`TRUNCATE TABLE ${table}`);
+            } catch (e) {
+                console.log(`Table ${table} might not exist, skipping...`);
+            }
+        }
+
+        await db.execute('SET FOREIGN_KEY_CHECKS=1');
+
+        return res.json({
+            success: true,
+            message: 'All data purged successfully',
+            tables_cleared: tables.length
+        });
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+// Admin: Seed demo data
+async function handleSeedDemoData(res: VercelResponse) {
+    const db = getDb();
+
+    try {
+        // Insert demo customers
+        const customers = [
+            { id: 'cust-demo-1', name: 'Rahul Sharma', email: 'rahul@example.com', phone: '+91-9876543210', address: 'Mumbai, Maharashtra' },
+            { id: 'cust-demo-2', name: 'Priya Patel', email: 'priya@example.com', phone: '+91-9876543211', address: 'Ahmedabad, Gujarat' },
+            { id: 'cust-demo-3', name: 'Amit Singh', email: 'amit@example.com', phone: '+91-9876543212', address: 'Delhi, NCR' }
+        ];
+
+        for (const cust of customers) {
+            await db.execute(
+                'INSERT INTO customers (id, name, email, phone, address) VALUES (?, ?, ?, ?, ?)',
+                [cust.id, cust.name, cust.email, cust.phone, cust.address]
+            );
+        }
+
+        // Insert demo bikes
+        const bikes = [
+            { id: 'bike-demo-1', registration_no: 'MH01XX1234', customer_id: 'cust-demo-1', manufacturer: 'Royal Enfield', model: 'Classic 350', year: 2022, color: 'Stealth Black' },
+            { id: 'bike-demo-2', registration_no: 'GJ05YY5678', customer_id: 'cust-demo-2', manufacturer: 'Honda', model: 'Activa 6G', year: 2023, color: 'Pearl White' },
+            { id: 'bike-demo-3', registration_no: 'DL03ZZ9012', customer_id: 'cust-demo-3', manufacturer: 'Bajaj', model: 'Pulsar NS200', year: 2021, color: 'Racing Red' }
+        ];
+
+        for (const bike of bikes) {
+            await db.execute(
+                'INSERT INTO bikes (id, registration_no, customer_id, manufacturer, model, year, color) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                [bike.id, bike.registration_no, bike.customer_id, bike.manufacturer, bike.model, bike.year, bike.color]
+            );
+        }
+
+        // Insert demo services
+        const services = [
+            { id: 'svc-demo-1', name: 'General Service', description: 'Complete bike servicing', price: 800, duration: 60, category: 'General' },
+            { id: 'svc-demo-2', name: 'Oil Change', description: 'Engine oil replacement', price: 500, duration: 30, category: 'General' },
+            { id: 'svc-demo-3', name: 'Brake Service', description: 'Brake pad replacement and adjustment', price: 1200, duration: 45, category: 'General' }
+        ];
+
+        for (const svc of services) {
+            await db.execute(
+                'INSERT INTO services (id, name, description, price, duration, category) VALUES (?, ?, ?, ?, ?, ?)',
+                [svc.id, svc.name, svc.description, svc.price, svc.duration, svc.category]
+            );
+        }
+
+        // Insert demo jobs
+        const job = {
+            id: 'job-demo-1',
+            job_no: 'JC-001',
+            customer_id: 'cust-demo-1',
+            vehicle_id: 'bike-demo-1',
+            status: 'in_progress',
+            priority: 'normal',
+            services: JSON.stringify([{ name: 'General Service', quantity: 1, amount: 800 }]),
+            total_amount: 800,
+            notes: 'Demo job card for testing'
+        };
+
+        await db.execute(
+            `INSERT INTO jobs (id, job_no, customer_id, vehicle_id, status, priority, services, total_amount, notes, created_at, updated_at) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+            [job.id, job.job_no, job.customer_id, job.vehicle_id, job.status, job.priority, job.services, job.total_amount, job.notes]
+        );
+
+        return res.json({
+            success: true,
+            message: 'Demo data seeded successfully',
+            data: {
+                customers: customers.length,
+                bikes: bikes.length,
+                services: services.length,
+                jobs: 1
+            }
+        });
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message });
+    }
 }
 
 function calculateTotal(items: any[]) {
