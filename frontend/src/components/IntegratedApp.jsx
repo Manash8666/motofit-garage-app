@@ -87,7 +87,7 @@ const NAV_ITEMS = [
 ];
 
 // Glass Card Component
-const GlassCard = ({ children, className = '' }) => (
+export const GlassCard = ({ children, className = '' }) => (
     <div
         className={`
       relative overflow-hidden rounded-2xl
