@@ -16,10 +16,7 @@ function getDb() {
 
     // Use URL-safe SSL configuration for TiDB Cloud
     const url = `mysql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}:${port}/${database}`;
-    return connect({
-        url,
-        ssl: { rejectUnauthorized: true }
-    });
+    return connect({ url });
 }
 
 // Simple URL router
