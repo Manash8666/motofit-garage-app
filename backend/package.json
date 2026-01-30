@@ -4,10 +4,7 @@
   "description": "MotoFit Backend API with Node.js, Express, and Firebase",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "test": "jest"
+    "dev": "tsx watch src/server.ts"
   },
   "keywords": [
     "motofit",
