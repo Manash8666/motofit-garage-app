@@ -29,14 +29,17 @@ const LoginForm = ({ onLogin, onForgotPassword, loading, error }) => {
         <form onSubmit={handleSubmit} className="space-y-6">
             {/* Username Field */}
             <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Username</label>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">Username</label>
                 <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
+                        id="username"
+                        name="username"
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder="Enter username"
+                        autoComplete="username"
                         className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white
                      placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 transition-all"
                         required
@@ -46,14 +49,17 @@ const LoginForm = ({ onLogin, onForgotPassword, loading, error }) => {
 
             {/* Password Field */}
             <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">Password</label>
                 <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
+                        id="password"
+                        name="password"
                         type={showPassword ? 'text' : 'password'}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Enter password"
+                        autoComplete="current-password"
                         className="w-full pl-12 pr-12 py-3 bg-white/5 border border-white/10 rounded-xl text-white
                      placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 transition-all"
                         required
@@ -70,8 +76,10 @@ const LoginForm = ({ onLogin, onForgotPassword, loading, error }) => {
 
             {/* Remember Me & Forgot Password */}
             <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2 cursor-pointer">
+                <label htmlFor="remember-me" className="flex items-center gap-2 cursor-pointer">
                     <input
+                        id="remember-me"
+                        name="remember-me"
                         type="checkbox"
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
@@ -154,14 +162,17 @@ const ForgotPasswordForm = ({ onSubmit, onBack, loading, success }) => {
             </div>
 
             <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                <label htmlFor="reset-email" className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
                 <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
+                        id="reset-email"
+                        name="email"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter your email"
+                        autoComplete="email"
                         className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white
                      placeholder-gray-500 focus:outline-none focus:border-orange-500/50 transition-all"
                         required
