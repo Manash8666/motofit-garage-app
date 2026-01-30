@@ -201,7 +201,7 @@ const TeamTab = () => {
     const [team, setTeam] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [newUser, setNewUser] = useState({ name: '', email: '', role: 'mechanic' });
+    const [newUser, setNewUser] = useState({ name: '', username: '', pin: '1234', role: 'mechanic' });
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -212,7 +212,7 @@ const TeamTab = () => {
                     const formattedTeam = data.map(u => ({
                         id: u.id,
                         name: u.full_name || u.username,
-                        email: u.email,
+                        email: u.username, // Using username as identifier in UI
                         role: u.role,
                         avatar: (u.full_name || u.username).substring(0, 2).toUpperCase(),
                         status: 'active', // Default status
@@ -231,23 +231,19 @@ const TeamTab = () => {
     }, []);
 
     const handleAddUser = async () => {
-        if (!newUser.name || !newUser.email) {
-            alert('Please fill in all fields');
+        if (!newUser.name || !newUser.username || !newUser.pin) {
+            alert('Please fill in all fields (Name, Username, PIN)');
             return;
         }
-
-        const defaultPassword = 'Motofit@2026';
-        // Generate username from email (e.g. john@domain.com -> john)
-        const username = newUser.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    username,
-                    password: defaultPassword,
-                    email: newUser.email,
+                    username: newUser.username,
+                    password: newUser.pin,
+                    email: `${newUser.username}@local`, // Dummy email for schema compatibility
                     role: newUser.role,
                     full_name: newUser.name
                 })
@@ -258,7 +254,7 @@ const TeamTab = () => {
                 const newMember = {
                     id: data.id,
                     name: data.full_name || data.username,
-                    email: data.email,
+                    email: data.username,
                     role: data.role,
                     avatar: (data.full_name || data.username).substring(0, 2).toUpperCase(),
                     status: 'active',
@@ -266,8 +262,8 @@ const TeamTab = () => {
                 };
                 setTeam([...team, newMember]);
                 setIsModalOpen(false);
-                setNewUser({ name: '', email: '', role: 'mechanic' });
-                alert(`✅ User added successfully!\n\nUsername: ${username}\nDefault Password: ${defaultPassword}`);
+                setNewUser({ name: '', username: '', pin: '1234', role: 'mechanic' });
+                alert(`✅ User created successfully!\n\nUsername: ${newUser.username}\nPIN: ${newUser.pin}`);
             } else {
                 const errorData = await response.json();
                 alert(`Failed to add user: ${errorData.error}`);
@@ -354,11 +350,32 @@ const TeamTab = () => {
                         <div className="space-y-4">
                             <div>
                                 <label className="block text-sm text-gray-400 mb-1">Full Name</label>
-                                <input className="w-full bg-slate-800 border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500" value={newUser.name} onChange={e => setNewUser({ ...newUser, name: e.target.value })} />
+                                <input
+                                    className="w-full bg-slate-800 border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    value={newUser.name}
+                                    onChange={e => setNewUser({ ...newUser, name: e.target.value })}
+                                    placeholder="e.g. Rahul Sharma"
+                                />
                             </div>
                             <div>
-                                <label className="block text-sm text-gray-400 mb-1">Email Address</label>
-                                <input className="w-full bg-slate-800 border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500" value={newUser.email} onChange={e => setNewUser({ ...newUser, email: e.target.value })} />
+                                <label className="block text-sm text-gray-400 mb-1">Username (Login ID)</label>
+                                <input
+                                    className="w-full bg-slate-800 border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    value={newUser.username}
+                                    onChange={e => setNewUser({ ...newUser, username: e.target.value.toLowerCase().replace(/[^a-z0-9]/g, '') })}
+                                    placeholder="e.g. rahul"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Login PIN</label>
+                                <input
+                                    type="text"
+                                    maxLength="6"
+                                    className="w-full bg-slate-800 border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 tracking-widest"
+                                    value={newUser.pin}
+                                    onChange={e => setNewUser({ ...newUser, pin: e.target.value.replace(/[^0-9]/g, '') })}
+                                    placeholder="1234"
+                                />
                             </div>
                             <div>
                                 <label className="block text-sm text-gray-400 mb-1">Role</label>
@@ -376,7 +393,7 @@ const TeamTab = () => {
                                 </div>
                             </div>
                             <button onClick={handleAddUser} className="w-full py-3 mt-4 bg-orange-600 rounded-xl text-white font-bold hover:bg-orange-500 transition-colors">
-                                Send Invite
+                                Create User
                             </button>
                         </div>
                     </div>
