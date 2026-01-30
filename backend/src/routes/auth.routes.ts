@@ -65,7 +65,7 @@ router.post('/login', async (req: Request, res: Response) => {
 // POST /api/auth/register (Admin only)
 router.post('/register', async (req: Request, res: Response) => {
     try {
-        const { username, password, role, email } = req.body;
+        const { username, password, role, email, full_name } = req.body;
 
         // Check if username exists
         const existing = await queryOne('SELECT id FROM users WHERE username = ?', [username]);
@@ -77,15 +77,16 @@ router.post('/register', async (req: Request, res: Response) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await query(
-            'INSERT INTO users (id, username, password_hash, role, email) VALUES (?, ?, ?, ?, ?)',
-            [id, username, hashedPassword, role || 'Staff', email || '']
+            'INSERT INTO users (id, username, password_hash, role, email, full_name) VALUES (?, ?, ?, ?, ?, ?)',
+            [id, username, hashedPassword, role || 'Staff', email || '', full_name || '']
         );
 
         res.status(201).json({
             id,
             username,
             role: role || 'Staff',
-            email
+            email,
+            full_name
         });
     } catch (error: any) {
         console.error('Register error:', error);

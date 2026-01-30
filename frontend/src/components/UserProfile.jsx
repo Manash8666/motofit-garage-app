@@ -230,10 +230,52 @@ const TeamTab = () => {
         fetchUsers();
     }, []);
 
-    const handleAddUser = () => {
-        // Implement API call for adding user if needed, for now just UI update as per previous logic (or better, alert)
-        alert('To add a user, please use the Registration API or Admin Console. UI-only add is disabled to prevent sync issues.');
-        setIsModalOpen(false);
+    const handleAddUser = async () => {
+        if (!newUser.name || !newUser.email) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        const defaultPassword = 'Motofit@2026';
+        // Generate username from email (e.g. john@domain.com -> john)
+        const username = newUser.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username,
+                    password: defaultPassword,
+                    email: newUser.email,
+                    role: newUser.role,
+                    full_name: newUser.name
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const newMember = {
+                    id: data.id,
+                    name: data.full_name || data.username,
+                    email: data.email,
+                    role: data.role,
+                    avatar: (data.full_name || data.username).substring(0, 2).toUpperCase(),
+                    status: 'active',
+                    joinDate: new Date().toISOString().split('T')[0]
+                };
+                setTeam([...team, newMember]);
+                setIsModalOpen(false);
+                setNewUser({ name: '', email: '', role: 'mechanic' });
+                alert(`✅ User added successfully!\n\nUsername: ${username}\nDefault Password: ${defaultPassword}`);
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to add user: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error('Error adding user:', error);
+            alert('An error occurred while adding the user');
+        }
     };
 
     const handleDeleteUser = async (id) => {
