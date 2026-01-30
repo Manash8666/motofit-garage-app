@@ -46,6 +46,7 @@ const CommandCenterScene = lazy(() => import('./CommandCenterScene'));
 const DashboardWidgets = lazy(() => import('./DashboardWidgets'));
 // Keep NotificationCenter eager as NotificationBell is used in Header
 import NotificationCenter, { NotificationBell } from './NotificationCenter';
+import TimeClock from './TimeClock';
 const TacticalVehicleViewer = lazy(() => import('./TacticalVehicleViewer'));
 const RepairOperations = lazy(() => import('./RepairOperations'));
 const PhotoGallery = lazy(() => import('./PhotoGallery'));
@@ -140,11 +141,16 @@ const CommandCenterDashboard = () => {
                             <Users className="w-6 h-6 text-emerald-400" />
                         </div>
                         <div>
-                            <p className="text-3xl font-bold text-emerald-400">3</p>
+                            <p className="text-3xl font-bold text-emerald-400">1</p>
                             <p className="text-sm text-gray-400">Mechanics Active</p>
                         </div>
                     </div>
                 </GlassCard>
+
+                {/* Time Clock Widget */}
+                <div className="md:col-span-2 md:row-span-2">
+                    <TimeClock />
+                </div>
 
                 <GlassCard className="p-5">
                     <div className="flex items-center gap-3">
@@ -406,7 +412,7 @@ const IntegratedApp = () => {
                             {/* Notification Bell */}
                             <NotificationBell
                                 onClick={() => setNotificationsOpen(!notificationsOpen)}
-                                unreadCount={3}
+                                unreadCount={0}
                             />
 
                             <button

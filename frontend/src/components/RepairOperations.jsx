@@ -145,15 +145,7 @@ const RepairOperations = () => {
         // createMission({ ... });
     };
 
-    const [newMission, setNewMission] = useState({
-        missionCode: `JC-${String(Math.floor(Math.random() * 900) + 100)}`,
-        vehicleId: '',
-        priority: 'yellow',
-        status: 'pending',
-        estimatedCost: 0,
-        bay: '',
-        services: []
-    });
+    // State for JobCardForm is handled by isJobCardFormOpen
 
     const handleMove = (id, direction) => {
         const mission = missions.find(m => m.id === id);
@@ -172,15 +164,6 @@ const RepairOperations = () => {
         if (targetStatus) {
             updateMission(id, { status: targetStatus });
         }
-    };
-
-    const handleCreate = () => {
-        createMission({
-            ...newMission,
-            customerId: 'walk-in',
-            bay: newMission.bay || null
-        });
-        setIsModalOpen(false);
     };
 
     const filteredMissions = missions.filter(m =>
@@ -248,147 +231,6 @@ const RepairOperations = () => {
                     onMove={handleMove}
                 />
             </div>
-
-            {/* New Mission Modal */}
-            <AnimatePresence>
-                {isModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            className="w-full max-w-lg"
-                        >
-                            <GlassCard className="p-6">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h3 className="text-xl font-bold text-white">Initialize New Mission</h3>
-                                    <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white">
-                                        <X className="w-6 h-6" />
-                                    </button>
-                                </div>
-
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm text-slate-400 mb-1">Vehicle ID / Name</label>
-                                        <input
-                                            type="text"
-                                            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white font-mono"
-                                            placeholder="e.g. GJ-01-AB-1234"
-                                            value={newMission.vehicleId}
-                                            onChange={e => setNewMission({ ...newMission, vehicleId: e.target.value })}
-                                        />
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm text-slate-400 mb-1">Priority Level</label>
-                                            <select
-                                                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white"
-                                                value={newMission.priority}
-                                                onChange={e => setNewMission({ ...newMission, priority: e.target.value })}
-                                            >
-                                                <option value="yellow">Standard (Yellow)</option>
-                                                <option value="orange">Urgent (Orange)</option>
-                                                <option value="red">Critical (Red)</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm text-slate-400 mb-1">Status</label>
-                                            <select
-                                                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white"
-                                                value={newMission.status}
-                                                onChange={e => setNewMission({ ...newMission, status: e.target.value })}
-                                            >
-                                                <option value="pending">Pending</option>
-                                                <option value="in-progress">Repairing</option>
-                                                <option value="completed">Completed</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm text-slate-400 mb-1">Est. Cost</label>
-                                            <input
-                                                type="number"
-                                                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white"
-                                                placeholder="0"
-                                                value={newMission.estimatedCost}
-                                                onChange={e => setNewMission({ ...newMission, estimatedCost: parseInt(e.target.value) || 0 })}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm text-slate-400 mb-1">Assign Bay</label>
-                                            <select
-                                                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white"
-                                                value={newMission.bay || ''}
-                                                onChange={e => setNewMission({ ...newMission, bay: e.target.value })}
-                                            >
-                                                <option value="">No Bay Assigned</option>
-                                                {bays.filter(b => b.status === 'available').map(bay => (
-                                                    <option key={bay.id} value={bay.id}>Bay {bay.id} (Available)</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm text-slate-400 mb-1">Mission Objective</label>
-                                        <input
-                                            type="text"
-                                            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white"
-                                            placeholder="e.g. Engine Diagnostic, Oil Change"
-                                            onChange={e => {
-                                                const service = e.target.value;
-                                                const isEngineRepair = service.toLowerCase().includes('engine repair');
-                                                setNewMission({
-                                                    ...newMission,
-                                                    services: [service],
-                                                    warranty: isEngineRepair ? newMission.warranty : undefined
-                                                });
-                                            }}
-                                        />
-                                    </div>
-
-                                    {/* Conditional Warranty Dropdown */}
-                                    {newMission.services[0]?.toLowerCase().includes('engine repair') && (
-                                        <motion.div
-                                            initial={{ opacity: 0, height: 0 }}
-                                            animate={{ opacity: 1, height: 'auto' }}
-                                            exit={{ opacity: 0, height: 0 }}
-                                        >
-                                            <label className="block text-sm text-orange-400 mb-1 font-bold">Warranty Coverage</label>
-                                            <select
-                                                className="w-full bg-slate-800 border border-orange-500/50 rounded-xl px-4 py-2 text-white"
-                                                value={newMission.warranty ? 'yes' : 'no'}
-                                                onChange={e => setNewMission({ ...newMission, warranty: e.target.value === 'yes' })}
-                                            >
-                                                <option value="no">No Coverage</option>
-                                                <option value="yes">Yes - Under Warranty</option>
-                                            </select>
-                                            <p className="text-xs text-orange-500/70 mt-1">
-                                                *Warranty applies only to approved Engine Repair work
-                                            </p>
-                                        </motion.div>
-                                    )}
-
-                                    <div className="pt-4 flex justify-end gap-3">
-                                        <button
-                                            onClick={() => setIsModalOpen(false)}
-                                            className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            onClick={handleCreate}
-                                            className="px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-bold shadow-lg shadow-cyan-500/20 transition-all"
-                                        >
-                                            Deploy Mission
-                                        </button>
-                                    </div>
-                                </div>
-                            </GlassCard>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
 
             {/* Job Card Creation Form */}
             <JobCardForm
