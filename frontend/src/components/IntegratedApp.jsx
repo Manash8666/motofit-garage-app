@@ -37,7 +37,7 @@ import TacticalLoader from './TacticalLoader';
 const InventoryManager = lazy(() => import('./InventoryManager'));
 const BikeDatabase = lazy(() => import('./BikeDatabase'));
 const ReportsAnalytics = lazy(() => import('./ReportsAnalytics'));
-const TimeClock = lazy(() => import('./TimeClock'));
+
 const InvoicePDF = lazy(() => import('./InvoicePDF'));
 const JobCardPrint = lazy(() => import('./JobCardPrint'));
 const UserProfile = lazy(() => import('./UserProfile'));
