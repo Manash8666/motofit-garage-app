@@ -138,67 +138,64 @@ const CommandCenterDashboard = () => {
 
                 <GlassCard className="p-5">
                     <div className="flex items-center gap-3">
-                        <GlassCard className="p-5">
-                            <div className="flex items-center gap-3">
-                                <div className={`p-3 rounded-xl ${alertLevel === 'green' ? 'bg-emerald-500/20' :
-                                    alertLevel === 'yellow' ? 'bg-yellow-500/20' :
-                                        alertLevel === 'orange' ? 'bg-orange-500/20' : 'bg-red-500/20'
-                                    }`}>
-                                    <Shield className={`w-6 h-6 ${alertLevel === 'green' ? 'text-emerald-400' :
-                                        alertLevel === 'yellow' ? 'text-yellow-400' :
-                                            alertLevel === 'orange' ? 'text-orange-400' : 'text-red-400'
-                                        }`} />
-                                </div>
+                        <div className={`p-3 rounded-xl ${alertLevel === 'green' ? 'bg-emerald-500/20' :
+                            alertLevel === 'yellow' ? 'bg-yellow-500/20' :
+                                alertLevel === 'orange' ? 'bg-orange-500/20' : 'bg-red-500/20'
+                            }`}>
+                            <Shield className={`w-6 h-6 ${alertLevel === 'green' ? 'text-emerald-400' :
+                                alertLevel === 'yellow' ? 'text-yellow-400' :
+                                    alertLevel === 'orange' ? 'text-orange-400' : 'text-red-400'
+                                }`} />
+                        </div>
+                        <div>
+                            <p className={`text-3xl font-bold uppercase ${alertLevel === 'green' ? 'text-emerald-400' :
+                                alertLevel === 'yellow' ? 'text-yellow-400' :
+                                    alertLevel === 'orange' ? 'text-orange-400' : 'text-red-400'
+                                }`}>{alertLevel}</p>
+                            <p className="text-sm text-gray-400">Alert Level</p>
+                        </div>
+                    </div>
+                </GlassCard>
+            </div>
+
+            {/* 3D Scene */}
+            <GlassCard className="p-0 h-[500px]">
+                <CommandCenterScene />
+            </GlassCard>
+
+            {/* Mission Queue */}
+            <GlassCard className="p-6">
+                <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <Wrench className="w-5 h-5 text-orange-400" />
+                    Active Missions
+                </h2>
+                <div className="space-y-3">
+                    {missions.map((mission) => (
+                        <motion.div
+                            key={mission.id}
+                            className={`p-4 rounded-xl bg-white/[0.03] border-l-4 ${mission.priority === 'red' ? 'border-l-red-500' :
+                                mission.priority === 'orange' ? 'border-l-orange-500' :
+                                    mission.priority === 'yellow' ? 'border-l-yellow-500' : 'border-l-gray-500'
+                                }`}
+                            whileHover={{ scale: 1.01 }}
+                        >
+                            <div className="flex items-center justify-between">
                                 <div>
-                                    <p className={`text-3xl font-bold uppercase ${alertLevel === 'green' ? 'text-emerald-400' :
-                                        alertLevel === 'yellow' ? 'text-yellow-400' :
-                                            alertLevel === 'orange' ? 'text-orange-400' : 'text-red-400'
-                                        }`}>{alertLevel}</p>
-                                    <p className="text-sm text-gray-400">Alert Level</p>
+                                    <span className="font-mono font-bold text-orange-400">{mission.missionCode}</span>
+                                    <span className={`ml-3 px-2 py-0.5 text-xs rounded-full ${mission.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
+                                        mission.status === 'in-progress' ? 'bg-blue-500/20 text-blue-400' :
+                                            'bg-emerald-500/20 text-emerald-400'
+                                        }`}>{mission.status}</span>
+                                </div>
+                                <div className="text-right">
+                                    <div className="font-bold text-white">₹{mission.estimatedCost.toLocaleString()}</div>
+                                    <div className="text-xs text-gray-500">Bay {mission.bay}</div>
                                 </div>
                             </div>
-                        </GlassCard>
-                    </div>
-
-                    {/* 3D Scene */}
-                    <GlassCard className="p-0 h-[500px]">
-                        <CommandCenterScene />
-                    </GlassCard>
-
-                    {/* Mission Queue */}
-                    <GlassCard className="p-6">
-                        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                            <Wrench className="w-5 h-5 text-orange-400" />
-                            Active Missions
-                        </h2>
-                        <div className="space-y-3">
-                            {missions.map((mission) => (
-                                <motion.div
-                                    key={mission.id}
-                                    className={`p-4 rounded-xl bg-white/[0.03] border-l-4 ${mission.priority === 'red' ? 'border-l-red-500' :
-                                        mission.priority === 'orange' ? 'border-l-orange-500' :
-                                            mission.priority === 'yellow' ? 'border-l-yellow-500' : 'border-l-gray-500'
-                                        }`}
-                                    whileHover={{ scale: 1.01 }}
-                                >
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <span className="font-mono font-bold text-orange-400">{mission.missionCode}</span>
-                                            <span className={`ml-3 px-2 py-0.5 text-xs rounded-full ${mission.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                mission.status === 'in-progress' ? 'bg-blue-500/20 text-blue-400' :
-                                                    'bg-emerald-500/20 text-emerald-400'
-                                                }`}>{mission.status}</span>
-                                        </div>
-                                        <div className="text-right">
-                                            <div className="font-bold text-white">₹{mission.estimatedCost.toLocaleString()}</div>
-                                            <div className="text-xs text-gray-500">Bay {mission.bay}</div>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </GlassCard>
-            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </GlassCard>
         </div>
     );
 };
