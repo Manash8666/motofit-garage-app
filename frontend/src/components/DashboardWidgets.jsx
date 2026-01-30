@@ -100,7 +100,7 @@ const Widget = ({ config, data, onToggleVisibility, visible }) => {
             className={`
         relative p-5 rounded-2xl border backdrop-blur-sm
         bg-gradient-to-br ${colorClasses[config.color]}
-        ${config.size === 'large' ? 'col-span-2 row-span-2' : config.size === 'medium' ? 'col-span-1 row-span-1' : 'col-span-1'}
+        ${config.size === 'large' ? 'md:col-span-2 md:row-span-2' : config.size === 'medium' ? 'md:col-span-1 md:row-span-1' : 'md:col-span-1'}
       `}
         >
             {/* Widget Header */}

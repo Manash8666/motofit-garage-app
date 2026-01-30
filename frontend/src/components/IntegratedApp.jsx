@@ -304,14 +304,26 @@ const IntegratedApp = () => {
                 <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
 
+            {/* Sidebar Overlay for Mobile */}
+            <AnimatePresence>
+                {sidebarOpen && window.innerWidth < 768 && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSidebarOpen(false)}
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+                    />
+                )}
+            </AnimatePresence>
+
             {/* Sidebar */}
             <motion.aside
-                className={`fixed left-0 top-0 h-full z-50 ${sidebarOpen ? 'w-64' : 'w-20'} transition-all duration-300`}
-                animate={{ width: sidebarOpen ? 256 : 80 }}
+                className={`fixed left-0 top-0 h-full z-50 transition-transform duration-300 md:translate-x-0 ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0 md:w-20'}`}
             >
                 <div className="h-full flex flex-col bg-gradient-to-b from-white/[0.06] to-white/[0.02] backdrop-blur-xl border-r border-white/[0.08]">
                     {/* Logo */}
-                    <div className="p-4 border-b border-white/[0.06]">
+                    <div className="p-4 border-b border-white/[0.06] flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl overflow-hidden bg-white/5 p-1 border border-white/10 group-hover:border-orange-500/30 transition-all">
                                 <img
@@ -320,7 +332,7 @@ const IntegratedApp = () => {
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            {sidebarOpen && (
+                            {(sidebarOpen || window.innerWidth < 768) && (
                                 <motion.div
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
@@ -330,6 +342,13 @@ const IntegratedApp = () => {
                                 </motion.div>
                             )}
                         </div>
+                        {/* Mobile Close Button */}
+                        <button
+                            className="md:hidden p-2 text-gray-400 hover:text-white"
+                            onClick={() => setSidebarOpen(false)}
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
                     </div>
 
                     {/* Nav Items */}
@@ -341,17 +360,20 @@ const IntegratedApp = () => {
                                     ? 'bg-gradient-to-r from-orange-500/20 to-orange-500/10 text-orange-400 border border-orange-500/20'
                                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                                     }`}
-                                onClick={() => navigate(item.path)}
+                                onClick={() => {
+                                    navigate(item.path);
+                                    if (window.innerWidth < 768) setSidebarOpen(false);
+                                }}
                                 whileHover={{ x: 4 }}
                             >
                                 <item.icon className="w-5 h-5 flex-shrink-0" />
-                                {sidebarOpen && <span className="font-medium">{item.label}</span>}
+                                {(sidebarOpen || window.innerWidth < 768) && <span className="font-medium">{item.label}</span>}
                             </motion.button>
                         ))}
                     </nav>
 
-                    {/* Sidebar Toggle */}
-                    <div className="p-4 border-t border-white/[0.06]">
+                    {/* Sidebar Toggle (Desktop Only) */}
+                    <div className="hidden md:block p-4 border-t border-white/[0.06]">
                         <button
                             className="w-full p-3 rounded-xl bg-white/5 text-gray-400 hover:text-white transition-colors"
                             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -363,12 +385,18 @@ const IntegratedApp = () => {
             </motion.aside>
 
             {/* Main Content */}
-            <main className={`flex-1 ${sidebarOpen ? 'md:ml-64 ml-0' : 'ml-20'} transition-all duration-300`}>
-                {/* Top Bar */}
+            <main className={`flex-1 transition-all duration-300 w-full ${sidebarOpen ? 'md:ml-64' : 'md:ml-20'}`}>
+                {/* Mobile Header Toggle */}
                 <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#050A15]/80 backdrop-blur-xl">
-                    <div className="flex items-center justify-between px-6 py-4">
-                        <div className="flex items-center gap-4">
-                            <h2 className="text-xl font-bold text-white">
+                    <div className="flex items-center justify-between px-4 md:px-6 py-4">
+                        <div className="flex items-center gap-3">
+                            <button
+                                className="md:hidden p-2 -ml-2 text-gray-400 hover:text-white"
+                                onClick={() => setSidebarOpen(true)}
+                            >
+                                <Menu className="w-6 h-6" />
+                            </button>
+                            <h2 className="text-lg md:text-xl font-bold text-white truncate">
                                 {NAV_ITEMS.find((n) => n.id === activeTab)?.label || 'Dashboard'}
                             </h2>
                         </div>
