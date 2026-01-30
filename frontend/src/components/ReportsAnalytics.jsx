@@ -147,55 +147,69 @@ const GenerateReportModal = ({ isOpen, onClose }) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
             <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="w-full max-w-md bg-[#1a1c23] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+                className="w-full max-w-md bg-black/40 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden relative"
             >
+                {/* Background Pulse Effect */}
+                <div className="absolute top-0 right-0 w-40 h-40 bg-orange-500/10 rounded-full blur-2xl -z-10 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl -z-10 pointer-events-none" />
+
                 <div className="p-6 border-b border-white/10 flex justify-between items-center">
                     <h3 className="text-xl font-bold text-white">Generate Report</h3>
-                    <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors">
+                    <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-xl text-gray-400 hover:text-white transition-colors border border-transparent hover:border-white/10">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
                 <div className="p-6 space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-400">Report Type</label>
-                        <select
-                            value={reportType}
-                            onChange={(e) => setReportType(e.target.value)}
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
-                        >
-                            <option value="financial">Financial Report</option>
-                            <option value="operational">Operational Report</option>
-                            <option value="inventory">Inventory Status</option>
-                            <option value="mechanic">Mechanic Performance</option>
-                            <option value="customer">Customer Analytics</option>
-                        </select>
+                        <label className="text-sm font-bold text-gray-300">Report Type</label>
+                        <div className="relative">
+                            <select
+                                value={reportType}
+                                onChange={(e) => setReportType(e.target.value)}
+                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-orange-500/50 focus:bg-white/10 transition-all appearance-none cursor-pointer"
+                            >
+                                <option value="financial" className="bg-slate-900">Financial Report</option>
+                                <option value="operational" className="bg-slate-900">Operational Report</option>
+                                <option value="inventory" className="bg-slate-900">Inventory Status</option>
+                                <option value="mechanic" className="bg-slate-900">Mechanic Performance</option>
+                                <option value="customer" className="bg-slate-900">Customer Analytics</option>
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-400">Date Range</label>
-                        <select className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50">
-                            <option value="last30">Last 30 Days</option>
-                            <option value="thisMonth">This Month</option>
-                            <option value="lastMonth">Last Month</option>
-                            <option value="thisYear">This Year</option>
-                            <option value="custom">Custom Range</option>
-                        </select>
+                        <label className="text-sm font-bold text-gray-300">Date Range</label>
+                        <div className="relative">
+                            <select className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-orange-500/50 focus:bg-white/10 transition-all appearance-none cursor-pointer">
+                                <option value="last30" className="bg-slate-900">Last 30 Days</option>
+                                <option value="thisMonth" className="bg-slate-900">This Month</option>
+                                <option value="lastMonth" className="bg-slate-900">Last Month</option>
+                                <option value="thisYear" className="bg-slate-900">This Year</option>
+                                <option value="custom" className="bg-slate-900">Custom Range</option>
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-400">Export Format</label>
+                        <label className="text-sm font-bold text-gray-300">Export Format</label>
                         <div className="grid grid-cols-3 gap-3">
                             {['pdf', 'csv', 'excel'].map((fmt) => (
                                 <button
                                     key={fmt}
                                     onClick={() => setFormat(fmt)}
-                                    className={`px-3 py-2 rounded-lg text-sm font-medium uppercase border transition-all ${format === fmt
-                                        ? 'bg-orange-500/20 border-orange-500/50 text-orange-400'
-                                        : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                                    className={`px-3 py-3 rounded-xl text-sm font-bold uppercase border transition-all ${format === fmt
+                                        ? 'bg-orange-500/20 border-orange-500/50 text-orange-400 shadow-[0_0_10px_rgba(249,115,22,0.1)]'
+                                        : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:border-white/20'
                                         }`}
                                 >
                                     {fmt}
@@ -205,10 +219,10 @@ const GenerateReportModal = ({ isOpen, onClose }) => {
                     </div>
                 </div>
 
-                <div className="p-6 border-t border-white/10 flex gap-3">
+                <div className="p-6 border-t border-white/10 flex gap-4">
                     <button
                         onClick={onClose}
-                        className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition-colors"
+                        className="flex-1 px-4 py-3.5 bg-white/5 hover:bg-white/10 hover:border-white/20 border border-white/10 text-white rounded-xl font-bold transition-all"
                     >
                         Cancel
                     </button>

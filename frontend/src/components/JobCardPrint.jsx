@@ -548,26 +548,35 @@ const JobCardPrint = () => {
                     onClick={() => setShowPreview(false)}
                 >
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className="relative max-w-5xl w-full max-h-[90vh] overflow-auto rounded-2xl shadow-2xl p-4 bg-gray-900"
+                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="relative max-w-5xl w-full max-h-[90vh] overflow-auto rounded-2xl shadow-2xl p-8 bg-black/40 backdrop-blur-xl border border-white/20"
                         onClick={(e) => e.stopPropagation()}
                     >
+                        {/* Background Pulse Effect */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+
                         <button
-                            className="fixed top-8 right-8 z-50 p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors shadow-2xl border border-gray-700"
+                            className="fixed top-8 right-8 z-50 p-3 rounded-xl bg-black/50 hover:bg-black/70 transition-colors shadow-2xl border border-white/20 hover:border-white/40 text-gray-400 hover:text-white"
                             onClick={() => setShowPreview(false)}
                         >
-                            <X className="w-6 h-6 text-white" />
+                            <X className="w-6 h-6" />
                         </button>
 
                         <div className="space-y-8 flex flex-col items-center">
                             <div className="w-full">
-                                <p className="text-white text-center mb-2 font-mono text-sm opacity-50 uppercase tracking-widest">Preview: MotoFit Copy</p>
-                                <PrintableJobCard jobCard={selectedCard} copyType="MOTOFIT COPY" />
+                                <p className="text-white text-center mb-4 font-mono text-sm opacity-50 uppercase tracking-widest bg-white/5 border border-white/10 mx-auto w-fit px-4 py-1 rounded-full">Preview: MotoFit Copy</p>
+                                <div className="rounded-sm overflow-hidden shadow-2xl">
+                                    <PrintableJobCard jobCard={selectedCard} copyType="MOTOFIT COPY" />
+                                </div>
                             </div>
                             <div className="w-full">
-                                <p className="text-white text-center mb-2 font-mono text-sm opacity-50 uppercase tracking-widest">Preview: Client Copy</p>
-                                <PrintableJobCard jobCard={selectedCard} copyType="CLIENT COPY" />
+                                <p className="text-white text-center mb-4 font-mono text-sm opacity-50 uppercase tracking-widest bg-white/5 border border-white/10 mx-auto w-fit px-4 py-1 rounded-full">Preview: Client Copy</p>
+                                <div className="rounded-sm overflow-hidden shadow-2xl">
+                                    <PrintableJobCard jobCard={selectedCard} copyType="CLIENT COPY" />
+                                </div>
                             </div>
                         </div>
                     </motion.div>
