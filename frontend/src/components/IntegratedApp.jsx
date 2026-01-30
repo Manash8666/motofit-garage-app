@@ -199,7 +199,8 @@ const CommandCenterDashboard = () => {
                         </div>
                     </GlassCard>
             </div>
-            );
+        </div>
+    );
 };
 
 // Jobs Page replaced by RepairOperations
@@ -208,18 +209,18 @@ const CommandCenterDashboard = () => {
 // Main Integrated App
 const IntegratedApp = () => {
     const navigate = useNavigate();
-            const location = useLocation();
-            const [sidebarOpen, setSidebarOpen] = useState(true);
+    const location = useLocation();
+    const [sidebarOpen, setSidebarOpen] = useState(true);
     // Check localStorage for existing auth token on mount
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         return !!localStorage.getItem('auth_token');
     });
-            const [notificationsOpen, setNotificationsOpen] = useState(false);
-            const [showTimeoutWarning, setShowTimeoutWarning] = useState(false);
-            const [timeoutSeconds, setTimeoutSeconds] = useState(60);
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [showTimeoutWarning, setShowTimeoutWarning] = useState(false);
+    const [timeoutSeconds, setTimeoutSeconds] = useState(60);
 
-            // Push Notifications
-            const {permission, isSupported, requestPermission, sendTestNotification} = usePushNotifications();
+    // Push Notifications
+    const { permission, isSupported, requestPermission, sendTestNotification } = usePushNotifications();
 
     // Auto-request notification permission when authenticated
     useEffect(() => {
@@ -234,31 +235,31 @@ const IntegratedApp = () => {
 
     // Proper logout handler - clears all auth data
     const handleLogout = () => {
-                localStorage.removeItem('auth_token');
-            localStorage.removeItem('motofit_user');
-            setIsAuthenticated(false);
-            setShowTimeoutWarning(false);
-            navigate('/');
-            logLogout();
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('motofit_user');
+        setIsAuthenticated(false);
+        setShowTimeoutWarning(false);
+        navigate('/');
+        logLogout();
     };
 
     // Session timeout handling
     const handleSessionLogout = () => {
-                handleLogout();
+        handleLogout();
     };
 
     const handleTimeoutWarning = (seconds) => {
-                setTimeoutSeconds(seconds);
-            setShowTimeoutWarning(true);
+        setTimeoutSeconds(seconds);
+        setShowTimeoutWarning(true);
     };
 
-            useSessionTimeout(handleSessionLogout, handleTimeoutWarning);
+    useSessionTimeout(handleSessionLogout, handleTimeoutWarning);
 
     // Sync active tab with URL
     const activeTab = NAV_ITEMS.find(item => location.pathname === item.path)?.id || 'command';
 
-            // Initialize Offline-First Sync
-            useSyncInitialization();
+    // Initialize Offline-First Sync
+    useSyncInitialization();
 
     // Close sidebar on mobile by default
     React.useEffect(() => {
@@ -267,8 +268,8 @@ const IntegratedApp = () => {
                 setSidebarOpen(false);
             }
         };
-            handleResize(); // Check on mount
-            window.addEventListener('resize', handleResize);
+        handleResize(); // Check on mount
+        window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
@@ -280,222 +281,222 @@ const IntegratedApp = () => {
     React.useEffect(() => {
         const handleOnline = () => setOnlineStatus(true);
         const handleOffline = () => setOnlineStatus(false);
-            window.addEventListener('online', handleOnline);
-            window.addEventListener('offline', handleOffline);
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
         return () => {
-                window.removeEventListener('online', handleOnline);
+            window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOffline);
         };
     }, []);
 
-            const alertLevel = useAlertLevel();
+    const alertLevel = useAlertLevel();
 
-            if (!isAuthenticated) {
+    if (!isAuthenticated) {
         return (
             <Suspense fallback={<TacticalLoader />}>
                 <LoginPage onLoginSuccess={() => setIsAuthenticated(true)} />
             </Suspense>
-            );
+        );
     }
 
-            return (
-            <div className="min-h-screen bg-[#050A15] text-white flex overflow-x-hidden">
-                {/* Animated Background */}
-                <div className="fixed inset-0 pointer-events-none">
-                    <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[120px] animate-pulse" />
-                    <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
-                </div>
-
-                {/* Sidebar */}
-                <motion.aside
-                    className={`fixed left-0 top-0 h-full z-50 ${sidebarOpen ? 'w-64' : 'w-20'} transition-all duration-300`}
-                    animate={{ width: sidebarOpen ? 256 : 80 }}
-                >
-                    <div className="h-full flex flex-col bg-gradient-to-b from-white/[0.06] to-white/[0.02] backdrop-blur-xl border-r border-white/[0.08]">
-                        {/* Logo */}
-                        <div className="p-4 border-b border-white/[0.06]">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl overflow-hidden bg-white/5 p-1 border border-white/10 group-hover:border-orange-500/30 transition-all">
-                                    <img
-                                        src="/motofit-neon-logo.jpg"
-                                        alt="MotoFit 2"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                {sidebarOpen && (
-                                    <motion.div
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                    >
-                                        <h1 className="font-bold text-white tracking-tight">MOTOFIT 2</h1>
-                                        <p className="text-[10px] text-orange-500 uppercase font-bold tracking-widest">Tactical Command</p>
-                                    </motion.div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Nav Items */}
-                        <nav className="p-3 space-y-1 flex-1 overflow-y-auto custom-scrollbar">
-                            {NAV_ITEMS.map((item) => (
-                                <motion.button
-                                    key={item.id}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === item.id
-                                        ? 'bg-gradient-to-r from-orange-500/20 to-orange-500/10 text-orange-400 border border-orange-500/20'
-                                        : 'text-gray-400 hover:text-white hover:bg-white/5'
-                                        }`}
-                                    onClick={() => navigate(item.path)}
-                                    whileHover={{ x: 4 }}
-                                >
-                                    <item.icon className="w-5 h-5 flex-shrink-0" />
-                                    {sidebarOpen && <span className="font-medium">{item.label}</span>}
-                                </motion.button>
-                            ))}
-                        </nav>
-
-                        {/* Sidebar Toggle */}
-                        <div className="p-4 border-t border-white/[0.06]">
-                            <button
-                                className="w-full p-3 rounded-xl bg-white/5 text-gray-400 hover:text-white transition-colors"
-                                onClick={() => setSidebarOpen(!sidebarOpen)}
-                            >
-                                {sidebarOpen ? <X className="w-5 h-5 mx-auto" /> : <Menu className="w-5 h-5 mx-auto" />}
-                            </button>
-                        </div>
-                    </div>
-                </motion.aside>
-
-                {/* Main Content */}
-                <main className={`flex-1 ${sidebarOpen ? 'md:ml-64 ml-0' : 'ml-20'} transition-all duration-300`}>
-                    {/* Top Bar */}
-                    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#050A15]/80 backdrop-blur-xl">
-                        <div className="flex items-center justify-between px-6 py-4">
-                            <div className="flex items-center gap-4">
-                                <h2 className="text-xl font-bold text-white">
-                                    {NAV_ITEMS.find((n) => n.id === activeTab)?.label || 'Dashboard'}
-                                </h2>
-                            </div>
-
-                            <div className="flex items-center gap-4">
-                                {/* Offline-First Sync Status */}
-                                <SyncStatusIndicator />
-
-                                {/* Alert Status */}
-                                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border ${alertLevel === 'green' ? 'bg-emerald-500/10 border-emerald-500/20' :
-                                    alertLevel === 'yellow' ? 'bg-yellow-500/10 border-yellow-500/20' :
-                                        alertLevel === 'orange' ? 'bg-orange-500/10 border-orange-500/20' :
-                                            'bg-red-500/10 border-red-500/20'
-                                    }`}>
-                                    <div className={`w-2 h-2 rounded-full animate-pulse ${alertLevel === 'green' ? 'bg-emerald-400' :
-                                        alertLevel === 'yellow' ? 'bg-yellow-400' :
-                                            alertLevel === 'orange' ? 'bg-orange-400' : 'bg-red-400'
-                                        }`} />
-                                    <span className={`text-sm font-medium uppercase ${alertLevel === 'green' ? 'text-emerald-400' :
-                                        alertLevel === 'yellow' ? 'text-yellow-400' :
-                                            alertLevel === 'orange' ? 'text-orange-400' : 'text-red-400'
-                                        }`}>{alertLevel}</span>
-                                </div>
-
-                                {/* Notification Bell */}
-                                <NotificationBell
-                                    onClick={() => setNotificationsOpen(!notificationsOpen)}
-                                    unreadCount={0}
-                                />
-
-                                <button
-                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 text-gray-400 hover:text-white transition-colors"
-                                    onClick={() => navigate('/profile')}
-                                >
-                                    <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center">
-                                        <span className="text-sm font-bold text-orange-400">CS</span>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-                    </header>
-
-                    {/* Notification Center Panel */}
-                    <NotificationCenter
-                        isOpen={notificationsOpen}
-                        onClose={() => setNotificationsOpen(false)}
-                        pushPermission={permission}
-                        pushSupported={isSupported}
-                        onRequestPush={requestPermission}
-                        onTestPush={sendTestNotification}
-                    />
-
-                    {/* Content */}
-                    <div className="p-6">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={location.pathname}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <Suspense fallback={<TacticalLoader />}>
-                                    <ErrorBoundary>
-                                        <Routes>
-                                            <Route path="/" element={<Navigate to="/command" replace />} />
-                                            <Route path="/command" element={<CommandCenterDashboard />} />
-                                            <Route path="/viewer" element={<TacticalVehicleViewer className="h-[700px]" showControls />} />
-                                            <Route path="/jobs" element={<RepairOperations />} />
-                                            <Route path="/inventory" element={<InventoryManager />} />
-                                            <Route path="/bikes" element={<BikeDatabase />} />
-                                            <Route path="/service-history" element={<ServiceTimeline vehicleId="demo-vehicle" vehicleName="Demo Vehicle" />} />
-                                            <Route path="/warranty" element={<WarrantyClaims vehicleId="demo-vehicle" vehicleName="Demo Vehicle" />} />
-                                            <Route path="/reports" element={<ReportsAnalytics />} />
-                                            <Route path="/invoices" element={<InvoicePDF />} />
-                                            <Route path="/job-cards" element={<JobCardPrint />} />
-                                            <Route path="/timeclock" element={<TimeClock />} />
-                                            <Route path="/profile" element={<UserProfile onLogout={handleLogout} />} />
-                                            <Route path="/sync-test" element={<OfflineTestDemo />} />
-                                            <Route path="/quotes" element={<QuoteManagement />} />
-                                            <Route path="/payments" element={<PaymentManagement />} />
-                                            <Route path="/leads" element={<LeadManagement />} />
-                                            <Route path="/accounting" element={<AccountingLedger />} />
-                                            <Route path="*" element={<Navigate to="/command" replace />} />
-                                        </Routes>
-                                    </ErrorBoundary>
-                                </Suspense>
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-                </main>
-
-                {/* Session Timeout Warning Modal */}
-                {showTimeoutWarning && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="bg-gradient-to-br from-orange-900/90 to-red-900/90 border border-orange-500/30 rounded-2xl p-8 max-w-md mx-4 text-center shadow-2xl"
-                        >
-                            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-orange-500/20 flex items-center justify-center">
-                                <Clock className="w-8 h-8 text-orange-400 animate-pulse" />
-                            </div>
-                            <h2 className="text-2xl font-bold text-white mb-2">Session Timeout Warning</h2>
-                            <p className="text-gray-300 mb-6">
-                                Your session will expire in <span className="text-orange-400 font-bold">{timeoutSeconds} seconds</span> due to inactivity.
-                            </p>
-                            <p className="text-sm text-gray-400 mb-6">
-                                Move your mouse or press any key to stay logged in.
-                            </p>
-                            <button
-                                onClick={() => setShowTimeoutWarning(false)}
-                                className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all"
-                            >
-                                Stay Logged In
-                            </button>
-                        </motion.div>
-                    </motion.div>
-                )}
+    return (
+        <div className="min-h-screen bg-[#050A15] text-white flex overflow-x-hidden">
+            {/* Animated Background */}
+            <div className="fixed inset-0 pointer-events-none">
+                <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
-            );
+
+            {/* Sidebar */}
+            <motion.aside
+                className={`fixed left-0 top-0 h-full z-50 ${sidebarOpen ? 'w-64' : 'w-20'} transition-all duration-300`}
+                animate={{ width: sidebarOpen ? 256 : 80 }}
+            >
+                <div className="h-full flex flex-col bg-gradient-to-b from-white/[0.06] to-white/[0.02] backdrop-blur-xl border-r border-white/[0.08]">
+                    {/* Logo */}
+                    <div className="p-4 border-b border-white/[0.06]">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl overflow-hidden bg-white/5 p-1 border border-white/10 group-hover:border-orange-500/30 transition-all">
+                                <img
+                                    src="/motofit-neon-logo.jpg"
+                                    alt="MotoFit 2"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            {sidebarOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                >
+                                    <h1 className="font-bold text-white tracking-tight">MOTOFIT 2</h1>
+                                    <p className="text-[10px] text-orange-500 uppercase font-bold tracking-widest">Tactical Command</p>
+                                </motion.div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Nav Items */}
+                    <nav className="p-3 space-y-1 flex-1 overflow-y-auto custom-scrollbar">
+                        {NAV_ITEMS.map((item) => (
+                            <motion.button
+                                key={item.id}
+                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === item.id
+                                    ? 'bg-gradient-to-r from-orange-500/20 to-orange-500/10 text-orange-400 border border-orange-500/20'
+                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                    }`}
+                                onClick={() => navigate(item.path)}
+                                whileHover={{ x: 4 }}
+                            >
+                                <item.icon className="w-5 h-5 flex-shrink-0" />
+                                {sidebarOpen && <span className="font-medium">{item.label}</span>}
+                            </motion.button>
+                        ))}
+                    </nav>
+
+                    {/* Sidebar Toggle */}
+                    <div className="p-4 border-t border-white/[0.06]">
+                        <button
+                            className="w-full p-3 rounded-xl bg-white/5 text-gray-400 hover:text-white transition-colors"
+                            onClick={() => setSidebarOpen(!sidebarOpen)}
+                        >
+                            {sidebarOpen ? <X className="w-5 h-5 mx-auto" /> : <Menu className="w-5 h-5 mx-auto" />}
+                        </button>
+                    </div>
+                </div>
+            </motion.aside>
+
+            {/* Main Content */}
+            <main className={`flex-1 ${sidebarOpen ? 'md:ml-64 ml-0' : 'ml-20'} transition-all duration-300`}>
+                {/* Top Bar */}
+                <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#050A15]/80 backdrop-blur-xl">
+                    <div className="flex items-center justify-between px-6 py-4">
+                        <div className="flex items-center gap-4">
+                            <h2 className="text-xl font-bold text-white">
+                                {NAV_ITEMS.find((n) => n.id === activeTab)?.label || 'Dashboard'}
+                            </h2>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            {/* Offline-First Sync Status */}
+                            <SyncStatusIndicator />
+
+                            {/* Alert Status */}
+                            <div className={`flex items-center gap-2 px-4 py-2 rounded-full border ${alertLevel === 'green' ? 'bg-emerald-500/10 border-emerald-500/20' :
+                                alertLevel === 'yellow' ? 'bg-yellow-500/10 border-yellow-500/20' :
+                                    alertLevel === 'orange' ? 'bg-orange-500/10 border-orange-500/20' :
+                                        'bg-red-500/10 border-red-500/20'
+                                }`}>
+                                <div className={`w-2 h-2 rounded-full animate-pulse ${alertLevel === 'green' ? 'bg-emerald-400' :
+                                    alertLevel === 'yellow' ? 'bg-yellow-400' :
+                                        alertLevel === 'orange' ? 'bg-orange-400' : 'bg-red-400'
+                                    }`} />
+                                <span className={`text-sm font-medium uppercase ${alertLevel === 'green' ? 'text-emerald-400' :
+                                    alertLevel === 'yellow' ? 'text-yellow-400' :
+                                        alertLevel === 'orange' ? 'text-orange-400' : 'text-red-400'
+                                    }`}>{alertLevel}</span>
+                            </div>
+
+                            {/* Notification Bell */}
+                            <NotificationBell
+                                onClick={() => setNotificationsOpen(!notificationsOpen)}
+                                unreadCount={0}
+                            />
+
+                            <button
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 text-gray-400 hover:text-white transition-colors"
+                                onClick={() => navigate('/profile')}
+                            >
+                                <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center">
+                                    <span className="text-sm font-bold text-orange-400">CS</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                {/* Notification Center Panel */}
+                <NotificationCenter
+                    isOpen={notificationsOpen}
+                    onClose={() => setNotificationsOpen(false)}
+                    pushPermission={permission}
+                    pushSupported={isSupported}
+                    onRequestPush={requestPermission}
+                    onTestPush={sendTestNotification}
+                />
+
+                {/* Content */}
+                <div className="p-6">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={location.pathname}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <Suspense fallback={<TacticalLoader />}>
+                                <ErrorBoundary>
+                                    <Routes>
+                                        <Route path="/" element={<Navigate to="/command" replace />} />
+                                        <Route path="/command" element={<CommandCenterDashboard />} />
+                                        <Route path="/viewer" element={<TacticalVehicleViewer className="h-[700px]" showControls />} />
+                                        <Route path="/jobs" element={<RepairOperations />} />
+                                        <Route path="/inventory" element={<InventoryManager />} />
+                                        <Route path="/bikes" element={<BikeDatabase />} />
+                                        <Route path="/service-history" element={<ServiceTimeline vehicleId="demo-vehicle" vehicleName="Demo Vehicle" />} />
+                                        <Route path="/warranty" element={<WarrantyClaims vehicleId="demo-vehicle" vehicleName="Demo Vehicle" />} />
+                                        <Route path="/reports" element={<ReportsAnalytics />} />
+                                        <Route path="/invoices" element={<InvoicePDF />} />
+                                        <Route path="/job-cards" element={<JobCardPrint />} />
+                                        <Route path="/timeclock" element={<TimeClock />} />
+                                        <Route path="/profile" element={<UserProfile onLogout={handleLogout} />} />
+                                        <Route path="/sync-test" element={<OfflineTestDemo />} />
+                                        <Route path="/quotes" element={<QuoteManagement />} />
+                                        <Route path="/payments" element={<PaymentManagement />} />
+                                        <Route path="/leads" element={<LeadManagement />} />
+                                        <Route path="/accounting" element={<AccountingLedger />} />
+                                        <Route path="*" element={<Navigate to="/command" replace />} />
+                                    </Routes>
+                                </ErrorBoundary>
+                            </Suspense>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+            </main>
+
+            {/* Session Timeout Warning Modal */}
+            {showTimeoutWarning && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+                >
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="bg-gradient-to-br from-orange-900/90 to-red-900/90 border border-orange-500/30 rounded-2xl p-8 max-w-md mx-4 text-center shadow-2xl"
+                    >
+                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-orange-500/20 flex items-center justify-center">
+                            <Clock className="w-8 h-8 text-orange-400 animate-pulse" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-white mb-2">Session Timeout Warning</h2>
+                        <p className="text-gray-300 mb-6">
+                            Your session will expire in <span className="text-orange-400 font-bold">{timeoutSeconds} seconds</span> due to inactivity.
+                        </p>
+                        <p className="text-sm text-gray-400 mb-6">
+                            Move your mouse or press any key to stay logged in.
+                        </p>
+                        <button
+                            onClick={() => setShowTimeoutWarning(false)}
+                            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all"
+                        >
+                            Stay Logged In
+                        </button>
+                    </motion.div>
+                </motion.div>
+            )}
+        </div>
+    );
 };
 
-            export default IntegratedApp;
+export default IntegratedApp;
