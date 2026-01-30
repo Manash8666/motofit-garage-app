@@ -19,7 +19,9 @@ import {
     Smartphone,
     Building,
     Banknote,
+    FileText,
 } from 'lucide-react';
+import InvoiceForm from './InvoiceForm';
 
 // Payment method icons and colors
 const PAYMENT_METHODS = {
@@ -41,6 +43,7 @@ const PaymentManagement = () => {
     const [showModal, setShowModal] = useState(false);
     const [customers, setCustomers] = useState([]);
     const [jobs, setJobs] = useState([]);
+    const [showInvoiceForm, setShowInvoiceForm] = useState(false);
 
     // Form state
     const [formData, setFormData] = useState({
@@ -171,15 +174,26 @@ const PaymentManagement = () => {
                     </h1>
                     <p className="text-gray-400 mt-1">Track and manage all payments</p>
                 </div>
-                <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => { resetForm(); setShowModal(true); }}
-                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-xl flex items-center gap-2 hover:from-green-600 hover:to-green-700 transition-all"
-                >
-                    <Plus className="w-5 h-5" />
-                    Record Payment
-                </motion.button>
+                <div className="flex gap-3">
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setShowInvoiceForm(true)}
+                        className="px-6 py-3 bg-white/5 border border-white/10 text-white font-medium rounded-xl flex items-center gap-2 hover:bg-white/10 transition-all"
+                    >
+                        <FileText className="w-5 h-5" />
+                        Create Invoice
+                    </motion.button>
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => { resetForm(); setShowModal(true); }}
+                        className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-xl flex items-center gap-2 hover:from-green-600 hover:to-green-700 transition-all"
+                    >
+                        <Plus className="w-5 h-5" />
+                        Record Payment
+                    </motion.button>
+                </div>
             </div>
 
             {/* Summary Cards */}
@@ -420,8 +434,8 @@ const PaymentManagement = () => {
                                                     type="button"
                                                     onClick={() => setFormData(prev => ({ ...prev, payment_method: key }))}
                                                     className={`p-3 rounded-xl border flex flex-col items-center gap-1 transition-all ${isSelected
-                                                            ? `${config.bg} border-white/30 ${config.color}`
-                                                            : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                                                        ? `${config.bg} border-white/30 ${config.color}`
+                                                        : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
                                                         }`}
                                                 >
                                                     <Icon className="w-5 h-5" />
@@ -463,6 +477,16 @@ const PaymentManagement = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Invoice Creation Form */}
+            <InvoiceForm
+                isOpen={showInvoiceForm}
+                onClose={() => setShowInvoiceForm(false)}
+                onSave={(invoice) => {
+                    console.log('Invoice created:', invoice);
+                    // Optionally fetch payments or invoices here
+                }}
+            />
         </div>
     );
 };
