@@ -26,7 +26,8 @@ import {
     MoreVertical,
     Check,
     Layout,
-    Hammer
+    Hammer,
+    Database
 } from 'lucide-react';
 
 // Get logged-in user from localStorage
@@ -623,6 +624,181 @@ const WorkshopTab = () => {
     );
 };
 
+// Data Management Tab Component
+const DataManagementTab = () => {
+    const [purging, setPurging] = useState(false);
+    const [seeding, setSeeding] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null);
+
+    const handlePurge = async () => {
+        setShowConfirm(false);
+        setPurging(true);
+
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const response = await fetch(`${apiUrl}/admin/purge`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to purge data');
+            }
+
+            const data = await response.json();
+            alert(`✅ ${data.message}\nTables cleared: ${data.tables_cleared}`);
+
+            // Refresh the page to clear cached data
+            window.location.reload();
+        } catch (error) {
+            alert(`⚠️ Error: ${error.message}`);
+        } finally {
+            setPurging(false);
+        }
+    };
+
+    const handleSeedDemo = async () => {
+        setShowConfirm(false);
+        setSeeding(true);
+
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const response = await fetch(`${apiUrl}/admin/seed-demo`, {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to seed demo data');
+            }
+
+            const data = await response.json();
+            alert(`✅ ${data.message}\nCustomers: ${data.data.customers}, Bikes: ${data.data.bikes}, Services: ${data.data.services}, Jobs: ${data.data.jobs}`);
+
+            // Refresh the page to show new data
+            window.location.reload();
+        } catch (error) {
+            alert(`⚠️ Error: ${error.message}`);
+        } finally {
+            setSeeding(false);
+        }
+    };
+
+    const openConfirmDialog = (action) => {
+        setConfirmAction(action);
+        setShowConfirm(true);
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
+                <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">⚠️ Danger Zone</h4>
+                        <p className="text-sm text-gray-300">
+                            These actions will permanently modify or delete all data in your database.
+                            Use with extreme caution!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="space-y-4">
+                {/* Purge All Data */}
+                <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                            <h3 className="text-lg font-bold text-white mb-1">Purge All Data</h3>
+                            <p className="text-sm text-gray-400">
+                                Permanently delete all customers, jobs, bikes, services, and related data.
+                                This action cannot be undone!
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => openConfirmDialog('purge')}
+                            disabled={purging}
+                            className="flex items-center gap-2 px-6 py-3 bg-red-600 rounded-xl text-white font-bold 
+                                     hover:bg-red-500 transition-colors shadow-lg shadow-red-500/20
+                                     disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                        >
+                            <Trash2 className="w-5 h-5" />
+                            {purging ? 'Purging...' : 'PURGE ALL'}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Restore Demo Data */}
+                <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                            <h3 className="text-lg font-bold text-white mb-1">Restore Demo Data</h3>
+                            <p className="text-sm text-gray-400">
+                                Add sample customers, bikes, services, and jobs for testing and demonstration purposes.
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => openConfirmDialog('seed')}
+                            disabled={seeding}
+                            className="flex items-center gap-2 px-6 py-3 bg-emerald-600 rounded-xl text-white font-bold 
+                                     hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-500/20
+                                     disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                        >
+                            <Plus className="w-5 h-5" />
+                            {seeding ? 'Restoring...' : 'RESTORE DEMO'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Confirmation Dialog */}
+            {showConfirm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                    <motion.div
+                        className="bg-slate-900 border border-white/10 rounded-2xl p-6 max-w-md w-full"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                    >
+                        <div className="flex items-start gap-3 mb-4">
+                            <div className={`p-3 rounded-xl ${confirmAction === 'purge' ? 'bg-red-500/20' : 'bg-emerald-500/20'}`}>
+                                <AlertCircle className={`w-6 h-6 ${confirmAction === 'purge' ? 'text-red-400' : 'text-emerald-400'}`} />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold text-white mb-2">
+                                    {confirmAction === 'purge' ? 'Confirm Data Purge' : 'Confirm Demo Restore'}
+                                </h3>
+                                <p className="text-sm text-gray-400">
+                                    {confirmAction === 'purge'
+                                        ? 'Are you absolutely sure? This will permanently delete ALL data from your database. This action CANNOT be undone!'
+                                        : 'This will add sample demo data to your database. You can purge it later if needed.'}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-3 mt-6">
+                            <button
+                                onClick={() => setShowConfirm(false)}
+                                className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-bold 
+                                         hover:bg-white/10 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmAction === 'purge' ? handlePurge : handleSeedDemo}
+                                className={`flex-1 px-4 py-3 rounded-xl text-white font-bold transition-colors shadow-lg
+                                    ${confirmAction === 'purge'
+                                        ? 'bg-red-600 hover:bg-red-500 shadow-red-500/20'
+                                        : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-500/20'}`}
+                            >
+                                {confirmAction === 'purge' ? 'YES, PURGE ALL' : 'YES, RESTORE DEMO'}
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
+        </div>
+    );
+};
+
 // Main User Profile Component
 const UserProfile = ({ onLogout }) => {
     const [activeTab, setActiveTab] = useState('profile');
@@ -632,6 +808,7 @@ const UserProfile = ({ onLogout }) => {
         { id: 'organization', label: 'Organization', icon: Building },
         { id: 'team', label: 'Team', icon: Users },
         { id: 'workshop', label: 'Workshop', icon: Layout },
+        { id: 'data', label: 'Data Management', icon: Database },
         { id: 'security', label: 'Security', icon: Shield },
     ];
 
@@ -694,6 +871,7 @@ const UserProfile = ({ onLogout }) => {
                 {activeTab === 'organization' && <OrganizationTab />}
                 {activeTab === 'team' && <TeamTab />}
                 {activeTab === 'workshop' && <WorkshopTab />}
+                {activeTab === 'data' && <DataManagementTab />}
                 {activeTab === 'security' && <SecurityTab />}
             </motion.div>
         </div>
