@@ -6,7 +6,9 @@ import {
     Wrench,
     X,
     Eye,
+    Plus,
 } from 'lucide-react';
+import JobCardForm from './JobCardForm';
 
 // Sample job card data
 const sampleJobCards = [
@@ -401,6 +403,7 @@ const JobCardPrint = () => {
     const [jobCards] = useState(sampleJobCards);
     const [selectedCard, setSelectedCard] = useState(sampleJobCards[0]);
     const [showPreview, setShowPreview] = useState(false);
+    const [showCreateForm, setShowCreateForm] = useState(false);
     const printRef = useRef();
 
     const handlePrint = () => {
@@ -470,6 +473,16 @@ const JobCardPrint = () => {
                         animate={{ opacity: 1, x: 0 }}
                     >
                         <div className="flex gap-3 mb-6">
+                            <motion.button
+                                className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white 
+                         font-medium rounded-xl shadow-lg shadow-teal-500/25"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => setShowCreateForm(true)}
+                            >
+                                <Plus className="w-4 h-4" />
+                                Create Job Card
+                            </motion.button>
                             <motion.button
                                 className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white 
                          font-medium rounded-xl shadow-lg shadow-teal-500/25"
@@ -560,6 +573,16 @@ const JobCardPrint = () => {
                     </motion.div>
                 </motion.div>
             )}
+
+            {/* Job Card Creation Form */}
+            <JobCardForm
+                isOpen={showCreateForm}
+                onClose={() => setShowCreateForm(false)}
+                onSave={(job) => {
+                    console.log('Job Card created:', job);
+                    setShowCreateForm(false);
+                }}
+            />
         </div>
     );
 };

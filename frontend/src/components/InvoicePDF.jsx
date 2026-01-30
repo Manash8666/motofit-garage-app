@@ -7,7 +7,9 @@ import {
     Send,
     Eye,
     X,
+    Plus,
 } from 'lucide-react';
+import InvoiceForm from './InvoiceForm';
 
 // Sample invoice data
 const sampleInvoice = {
@@ -300,6 +302,7 @@ const PrintableInvoice = React.forwardRef(({ invoice }, ref) => {
 // Invoice Manager Component
 const InvoicePDF = () => {
     const [showPreview, setShowPreview] = useState(false);
+    const [showCreateForm, setShowCreateForm] = useState(false);
     const [invoices] = useState([
         { ...sampleInvoice },
         { ...sampleInvoice, id: 'INV-2026-002', customer: { ...sampleInvoice.customer, name: 'Amit Shah' }, total: 5200, status: 'paid' },
@@ -392,6 +395,15 @@ const InvoicePDF = () => {
                                 className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white 
                          font-medium rounded-xl shadow-lg shadow-teal-500/25"
                                 whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => setShowCreateForm(true)}
+                            >
+                                <Plus className="w-5 h-5" />
+                                Create Invoice
+                            </motion.button>
+                            <motion.button
+                                className="flex items-center gap-2 px-4 py-3 bg-white/5 border border-white/10 text-white rounded-xl"
+                                whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.1)' }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => setShowPreview(true)}
                             >
@@ -497,6 +509,15 @@ const InvoicePDF = () => {
                     </motion.div>
                 </motion.div>
             )}
+            {/* Invoice Creation Form */}
+            <InvoiceForm
+                isOpen={showCreateForm}
+                onClose={() => setShowCreateForm(false)}
+                onSave={(invoice) => {
+                    console.log('Invoice created:', invoice);
+                    setShowCreateForm(false);
+                }}
+            />
         </div>
     );
 };
