@@ -404,7 +404,12 @@ const IntegratedApp = () => {
                                 onClick={() => navigate('/profile')}
                             >
                                 <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center">
-                                    <span className="text-sm font-bold text-orange-400">CS</span>
+                                    <span className="text-sm font-bold text-orange-400">
+                                        {(() => {
+                                            const user = JSON.parse(localStorage.getItem('motofit_user') || '{}');
+                                            return user.name ? user.name.substring(0, 2).toUpperCase() : (user.username ? user.username.substring(0, 2).toUpperCase() : 'Guest');
+                                        })()}
+                                    </span>
                                 </div>
                             </button>
                         </div>

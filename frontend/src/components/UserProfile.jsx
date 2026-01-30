@@ -820,13 +820,28 @@ const DataManagementTab = () => {
 // Main User Profile Component
 const UserProfile = ({ onLogout }) => {
     const [activeTab, setActiveTab] = useState('profile');
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('motofit_user') || '{}');
+        setUser(storedUser);
+    }, []);
+
+    const hasFullAccess = useMemo(() => {
+        if (!user) return false;
+        const privilegedUsernames = ['akshat', 'munna', 'samael'];
+        const privilegedRoles = ['Owner', 'Admin', 'Senior Head Mechanic', 'Sr. Head Mechanic'];
+        return privilegedUsernames.includes(user.username) || privilegedRoles.includes(user.role);
+    }, [user]);
 
     const tabs = [
         { id: 'profile', label: 'My Profile', icon: User },
-        { id: 'organization', label: 'Organization', icon: Building },
-        { id: 'team', label: 'Team', icon: Users },
-        { id: 'workshop', label: 'Workshop', icon: Layout },
-        { id: 'data', label: 'Data Management', icon: Database },
+        ...(hasFullAccess ? [
+            { id: 'organization', label: 'Organization', icon: Building },
+            { id: 'team', label: 'Team', icon: Users },
+            { id: 'workshop', label: 'Workshop', icon: Layout },
+            { id: 'data', label: 'Data Management', icon: Database },
+        ] : []),
         { id: 'security', label: 'Security', icon: Shield },
     ];
 

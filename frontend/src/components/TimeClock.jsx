@@ -4,10 +4,10 @@ import { Clock, LogIn, LogOut, Coffee, Play, Pause } from 'lucide-react';
 import { GlassCard } from './IntegratedApp';
 
 const TEAM_MEMBERS = [
-    { id: 1, name: 'Manash', role: 'Owner', avatar: 'M', pin: '1234' },
-    { id: 2, name: 'Amit', role: 'Head Mechanic', avatar: 'A', pin: '1234' },
-    { id: 3, name: 'Rahul', role: 'Mechanic', avatar: 'R', pin: '1234' },
-    { id: 4, name: 'Suresh', role: 'Helper', avatar: 'S', pin: '1234' },
+    { id: 1, name: 'Akshat', role: 'Owner', avatar: 'A', pin: '1234' },
+    { id: 2, name: 'Munna', role: 'Sr. Head Mechanic', avatar: 'M', pin: '1234' },
+    { id: 3, name: 'Goarav', role: 'Mechanic', avatar: 'G', pin: '1234' },
+    { id: 4, name: 'Kunal', role: 'Jr. Mechanic', avatar: 'K', pin: '1234' },
 ];
 
 const TimeClock = () => {
@@ -186,8 +186,8 @@ const TimeClock = () => {
                                     <div
                                         key={i}
                                         className={`w-4 h-4 rounded-full border-2 transition-all ${enteredPin.length > i
-                                                ? 'bg-orange-500 border-orange-500'
-                                                : 'bg-transparent border-white/30'
+                                            ? 'bg-orange-500 border-orange-500'
+                                            : 'bg-transparent border-white/30'
                                             }`}
                                     />
                                 ))}
@@ -253,8 +253,8 @@ const TimeClock = () => {
                             <div className="mb-10 text-center">
                                 <h2 className="text-3xl text-white font-bold mb-2">{selectedUser.name}</h2>
                                 <div className={`inline-block px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider ${currentUserStatus.status === 'clocked-in' ? 'bg-emerald-500/20 text-emerald-400' :
-                                        currentUserStatus.status === 'break' ? 'bg-yellow-500/20 text-yellow-400' :
-                                            'bg-gray-500/20 text-gray-400'
+                                    currentUserStatus.status === 'break' ? 'bg-yellow-500/20 text-yellow-400' :
+                                        'bg-gray-500/20 text-gray-400'
                                     }`}>
                                     {currentUserStatus.status.replace('-', ' ')}
                                 </div>
@@ -287,8 +287,8 @@ const TimeClock = () => {
                                         <button
                                             onClick={() => updateStatus(currentUserStatus.status === 'break' ? 'clocked-in' : 'break')}
                                             className={`py-6 rounded-2xl font-bold text-lg uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg ${currentUserStatus.status === 'break'
-                                                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
-                                                    : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 hover:bg-yellow-500/30'
+                                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
+                                                : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 hover:bg-yellow-500/30'
                                                 }`}
                                         >
                                             {currentUserStatus.status === 'break' ? <Play className="w-6 h-6" /> : <Coffee className="w-6 h-6" />}
