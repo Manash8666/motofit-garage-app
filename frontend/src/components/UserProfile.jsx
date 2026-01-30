@@ -198,20 +198,56 @@ const OrganizationTab = () => {
 
 // Team Tab Component
 const TeamTab = () => {
-    const [team, setTeam] = useState(initialTeam);
+    const [team, setTeam] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newUser, setNewUser] = useState({ name: '', email: '', role: 'mechanic' });
 
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/users`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const formattedTeam = data.map(u => ({
+                        id: u.id,
+                        name: u.full_name || u.username,
+                        email: u.email,
+                        role: u.role,
+                        avatar: (u.full_name || u.username).substring(0, 2).toUpperCase(),
+                        status: 'active', // Default status
+                        joinDate: u.created_at ? new Date(u.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+                    }));
+                    setTeam(formattedTeam);
+                }
+            } catch (error) {
+                console.error('Failed to fetch users:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
     const handleAddUser = () => {
-        const id = team.length + 1;
-        const avatar = newUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
-        setTeam([...team, { ...newUser, id, status: 'invited', avatar }]);
+        // Implement API call for adding user if needed, for now just UI update as per previous logic (or better, alert)
+        alert('To add a user, please use the Registration API or Admin Console. UI-only add is disabled to prevent sync issues.');
         setIsModalOpen(false);
-        setNewUser({ name: '', email: '', role: 'mechanic' });
     };
 
-    const handleDeleteUser = (id) => {
-        setTeam(team.filter(u => u.id !== id));
+    const handleDeleteUser = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this user?')) return;
+
+        try {
+            await fetch(`${import.meta.env.VITE_API_URL}/users/${id}`, {
+                method: 'DELETE'
+            });
+            setTeam(team.filter(u => u.id !== id));
+        } catch (error) {
+            console.error('Failed to delete user:', error);
+            alert('Failed to delete user');
+        }
     };
 
     return (

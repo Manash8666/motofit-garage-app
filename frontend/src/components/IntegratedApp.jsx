@@ -327,9 +327,13 @@ const IntegratedApp = () => {
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl overflow-hidden bg-white/5 p-1 border border-white/10 group-hover:border-orange-500/30 transition-all">
                                 <img
-                                    src="/motofit-neon-logo.jpg"
+                                    src={(() => {
+                                        const storedLogo = localStorage.getItem('motofit_org_logo');
+                                        return storedLogo || "/motofit-neon-logo.jpg";
+                                    })()}
                                     alt="MotoFit 2"
                                     className="w-full h-full object-cover"
+                                    onError={(e) => { e.target.onerror = null; e.target.src = "/motofit-neon-logo.jpg"; }}
                                 />
                             </div>
                             {(sidebarOpen || window.innerWidth < 768) && (

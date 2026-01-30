@@ -21,6 +21,7 @@ import paymentRoutes from './routes/payment.routes';
 import leadRoutes from './routes/lead.routes';
 import transactionRoutes from './routes/transaction.routes';
 import cronRoutes from './routes/cron.routes';
+import userRoutes from './routes/user.routes';
 
 import { startLeadSync } from './services/leadSync.service';
 
@@ -70,6 +71,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/leads', leadRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/cron', cronRoutes);
+app.use('/api/users', userRoutes);
 
 
 // Health check
