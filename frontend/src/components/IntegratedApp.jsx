@@ -159,7 +159,7 @@ const CommandCenterDashboard = () => {
             </div>
 
             {/* 3D Scene */}
-            <GlassCard className="p-0 h-[500px]">
+            <GlassCard className="p-0 h-[350px] md:h-[500px]">
                 <CommandCenterScene />
             </GlassCard>
 
@@ -469,7 +469,7 @@ const IntegratedApp = () => {
                                     <Routes>
                                         <Route path="/" element={<Navigate to="/command" replace />} />
                                         <Route path="/command" element={<CommandCenterDashboard />} />
-                                        <Route path="/viewer" element={<TacticalVehicleViewer className="h-[700px]" showControls />} />
+                                        <Route path="/viewer" element={<TacticalVehicleViewer className="h-[500px] md:h-[700px]" showControls />} />
                                         <Route path="/jobs" element={<RepairOperations />} />
                                         <Route path="/inventory" element={<InventoryManager />} />
                                         <Route path="/bikes" element={<BikeDatabase />} />
