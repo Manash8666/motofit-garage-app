@@ -52,75 +52,99 @@ const TimeClock = () => {
     };
 
     return (
-        <GlassCard className="p-6 relative overflow-hidden">
-            {/* Background Pulse */}
-            <div className={`absolute -right-10 -top-10 w-40 h-40 rounded-full blur-[50px] transition-all duration-1000 ${status === 'clocked-in' ? 'bg-emerald-500/20' :
-                    status === 'break' ? 'bg-yellow-500/20' : 'bg-red-500/20'
-                }`} />
-
-            <div className="relative z-10">
-                <div className="flex justify-between items-start mb-6">
-                    <div>
-                        <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                            <Clock className="w-5 h-5 text-cyan-400" />
-                            Digital Time Clock
-                        </h3>
-                        <p className="text-slate-400 text-sm">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
-                    </div>
-                    <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${status === 'clocked-in' ? 'bg-emerald-500/20 text-emerald-400' :
-                            status === 'break' ? 'bg-yellow-500/20 text-yellow-400' :
-                                'bg-red-500/20 text-red-400'
-                        }`}>
-                        {status.replace('-', ' ')}
-                    </div>
-                </div>
-
-                {/* Digital Display */}
-                <div className="flex flex-col items-center justify-center py-6">
-                    <div className="text-5xl md:text-6xl font-mono font-bold text-white tracking-wider tabular-nums drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                        {formatTime(time)}
-                    </div>
-                    {status !== 'clocked-out' && (
-                        <div className="mt-2 font-mono text-cyan-400">
-                            Shift Duration: {formatDuration(duration)}
-                        </div>
-                    )}
-                </div>
-
-                {/* Controls */}
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                    {status === 'clocked-out' ? (
-                        <button
-                            onClick={handleClockIn}
-                            className="col-span-2 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/20 group"
-                        >
-                            <LogIn className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                            Clock In
-                        </button>
-                    ) : (
-                        <>
-                            <button
-                                onClick={handleBreak}
-                                className={`py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${status === 'break'
-                                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                        : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 hover:bg-yellow-500/20'
-                                    }`}
-                            >
-                                {status === 'break' ? <Play className="w-5 h-5" /> : <Coffee className="w-5 h-5" />}
-                                {status === 'break' ? 'Resume' : 'Break'}
-                            </button>
-                            <button
-                                onClick={handleClockOut}
-                                className="py-3 bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 rounded-xl font-bold flex items-center justify-center gap-2 transition-all"
-                            >
-                                <LogOut className="w-5 h-5" />
-                                Clock Out
-                            </button>
-                        </>
-                    )}
-                </div>
+        <div className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+            {/* Cinematic Video Background */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute inset-0 bg-black/60 z-10 backdrop-blur-[2px]" />
+                <img
+                    src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2070&auto=format&fit=crop"
+                    alt="Motorcycle Mechanic Background"
+                    className="w-full h-full object-cover opacity-80"
+                />
+                {/* Note: In a real production app, use a <video> tag here with a source like:
+                    <video autoPlay loop muted className="w-full h-full object-cover">
+                        <source src="/mechanic-cinematic.mp4" type="video/mp4" />
+                    </video>
+                    Using a high-quality Unsplash image as a reliable fallback/placeholder for now.
+                */}
             </div>
-        </GlassCard>
+
+            <GlassCard className="p-12 relative z-20 max-w-2xl w-full mx-4 border-white/20 shadow-2xl backdrop-blur-md bg-black/40">
+                {/* Background Pulse */}
+                <div className={`absolute -right-20 -top-20 w-80 h-80 rounded-full blur-[100px] transition-all duration-1000 ${status === 'clocked-in' ? 'bg-emerald-500/30' :
+                        status === 'break' ? 'bg-yellow-500/30' : 'bg-red-500/30'
+                    }`} />
+
+                <div className="relative z-10">
+                    <div className="text-center mb-10">
+                        <h1 className="text-5xl font-black text-white tracking-tight mb-2 uppercase drop-shadow-lg">
+                            MOTO<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">FIT</span> TIME CLOCK
+                        </h1>
+                        <p className="text-slate-300 text-lg uppercase tracking-widest font-medium">
+                            {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+                        </p>
+                    </div>
+
+                    <div className="flex justify-center mb-8">
+                        <div className={`px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider border transition-all duration-500 ${status === 'clocked-in' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.3)]' :
+                                status === 'break' ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30 shadow-[0_0_20px_rgba(234,179,8,0.3)]' :
+                                    'bg-red-500/20 text-red-300 border-red-500/30 shadow-[0_0_20px_rgba(239,68,68,0.3)]'
+                            }`}>
+                            Current Status: {status.replace('-', ' ')}
+                        </div>
+                    </div>
+
+                    {/* Digital Display */}
+                    <div className="flex flex-col items-center justify-center py-10 bg-black/40 rounded-3xl border border-white/10 backdrop-blur-sm mb-10 shadow-inner">
+                        <div className="text-7xl md:text-8xl font-mono font-bold text-white tracking-wider tabular-nums drop-shadow-[0_0_25px_rgba(255,255,255,0.5)]">
+                            {formatTime(time)}
+                        </div>
+                        {status !== 'clocked-out' && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="mt-4 font-mono text-cyan-400 text-xl font-bold"
+                            >
+                                Shift Duration: {formatDuration(duration)}
+                            </motion.div>
+                        )}
+                    </div>
+
+                    {/* Controls */}
+                    <div className="grid grid-cols-2 gap-6">
+                        {status === 'clocked-out' ? (
+                            <button
+                                onClick={handleClockIn}
+                                className="col-span-2 py-6 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white rounded-2xl font-black text-xl uppercase tracking-wider flex items-center justify-center gap-3 transition-all shadow-[0_10px_40px_rgba(16,185,129,0.4)] group border border-emerald-400/20"
+                            >
+                                <LogIn className="w-8 h-8 group-hover:scale-110 transition-transform" />
+                                Start Shift
+                            </button>
+                        ) : (
+                            <>
+                                <button
+                                    onClick={handleBreak}
+                                    className={`py-6 rounded-2xl font-bold text-lg uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg ${status === 'break'
+                                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
+                                            : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 hover:bg-yellow-500/30'
+                                        }`}
+                                >
+                                    {status === 'break' ? <Play className="w-6 h-6" /> : <Coffee className="w-6 h-6" />}
+                                    {status === 'break' ? 'Resume' : 'Take Break'}
+                                </button>
+                                <button
+                                    onClick={handleClockOut}
+                                    className="py-6 bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30 rounded-2xl font-bold text-lg uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-red-500/20"
+                                >
+                                    <LogOut className="w-6 h-6" />
+                                    End Shift
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </GlassCard>
+        </div>
     );
 };
 

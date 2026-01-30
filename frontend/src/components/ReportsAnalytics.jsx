@@ -126,6 +126,117 @@ const CustomTooltip = ({ active, payload, label }) => {
     return null;
 };
 
+const GenerateReportModal = ({ isOpen, onClose }) => {
+    const [reportType, setReportType] = useState('financial');
+    const [format, setFormat] = useState('pdf');
+    const [isGenerating, setIsGenerating] = useState(false);
+
+    if (!isOpen) return null;
+
+    const handleGenerate = () => {
+        setIsGenerating(true);
+        // Simulate generation
+        setTimeout(() => {
+            setIsGenerating(false);
+            onClose();
+            // In a real app, this would trigger a download
+            console.log(`Generating ${reportType} report in ${format} format`);
+        }, 2000);
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="w-full max-w-md bg-[#1a1c23] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+            >
+                <div className="p-6 border-b border-white/10 flex justify-between items-center">
+                    <h3 className="text-xl font-bold text-white">Generate Report</h3>
+                    <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                <div className="p-6 space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-400">Report Type</label>
+                        <select
+                            value={reportType}
+                            onChange={(e) => setReportType(e.target.value)}
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                        >
+                            <option value="financial">Financial Report</option>
+                            <option value="operational">Operational Report</option>
+                            <option value="inventory">Inventory Status</option>
+                            <option value="mechanic">Mechanic Performance</option>
+                            <option value="customer">Customer Analytics</option>
+                        </select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-400">Date Range</label>
+                        <select className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50">
+                            <option value="last30">Last 30 Days</option>
+                            <option value="thisMonth">This Month</option>
+                            <option value="lastMonth">Last Month</option>
+                            <option value="thisYear">This Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-400">Export Format</label>
+                        <div className="grid grid-cols-3 gap-3">
+                            {['pdf', 'csv', 'excel'].map((fmt) => (
+                                <button
+                                    key={fmt}
+                                    onClick={() => setFormat(fmt)}
+                                    className={`px-3 py-2 rounded-lg text-sm font-medium uppercase border transition-all ${format === fmt
+                                        ? 'bg-orange-500/20 border-orange-500/50 text-orange-400'
+                                        : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                                        }`}
+                                >
+                                    {fmt}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="p-6 border-t border-white/10 flex gap-3">
+                    <button
+                        onClick={onClose}
+                        className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition-colors"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={handleGenerate}
+                        disabled={isGenerating}
+                        className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-orange-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isGenerating ? (
+                            <>
+                                <RefreshCw className="w-5 h-5 animate-spin" />
+                                Generating...
+                            </>
+                        ) : (
+                            <>
+                                <FileText className="w-5 h-5" />
+                                Generate Report
+                            </>
+                        )}
+                    </button>
+                </div>
+            </motion.div>
+        </div>
+    );
+};
+
+
+
 const ReportsAnalytics = () => {
     const [period, setPeriod] = useState('month');
     const [isLoading, setIsLoading] = useState(false);
@@ -550,6 +661,11 @@ const ReportsAnalytics = () => {
                     </div>
                 </ChartCard>
             </div>
+
+            <GenerateReportModal
+                isOpen={isReportModalOpen}
+                onClose={() => setIsReportModalOpen(false)}
+            />
         </div>
     );
 };
