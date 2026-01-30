@@ -206,7 +206,9 @@ const TeamTab = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/users`);
+                // Normalize API URL
+                const baseUrl = import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '');
+                const response = await fetch(`${baseUrl}/api/users`);
                 if (response.ok) {
                     const data = await response.json();
                     const formattedTeam = data.map(u => ({
@@ -237,7 +239,11 @@ const TeamTab = () => {
         }
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+            // Normalize API URL: ensure it maps to /api/auth/register
+            const baseUrl = import.meta.env.VITE_API_URL.replace(/\/api\/?$/, ''); // Remove trailing /api
+            const endpoint = `${baseUrl}/api/auth/register`;
+
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
